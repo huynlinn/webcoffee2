@@ -1,7 +1,7 @@
 <footer>
   <div class="container">
     <div class="logo">
-      <a href=""><img src="images/logo-grabfood-white.svg" alt=""></a>
+      <!-- <a href=""><img src="images/logo-grabfood-white.svg" alt=""></a> -->
       <div class="time" style="padding-left:50%;">
         <a href="https://time.is/Vietnam" id="time_is_link" rel="nofollow"></a>
         <span id="Vietnam_z418" style="font-size:40px"></span>

@@ -13,6 +13,8 @@ if (isset($_GET['id'])) {
         header('Location: index.php');
         die();
     }
+    $sqlSizes = 'SELECT size, price FROM product_size WHERE product_id=' . $id;
+    $sizes = executeResult($sqlSizes);
 }
 ?>
 <div id="fb-root"></div>
@@ -41,35 +43,115 @@ if (isset($_GET['id'])) {
                             <img src="<?='admin/product/'.$product['thumbnail'] ?>" alt="">
                             <div class="about">
                                 <p><?= $product['content'] ?></p>
-                                <div class="size">
+                                <!-- <div class="size">
                                     <p>Size:</p>
                                     <ul>
                                         <li><a href="">S</a></li>
                                         <li><a href="">M</a></li>
                                         <li><a href="">L</a></li>
                                     </ul>
-                                </div>
+                                </div> -->
+                                <div class="size">
+    <p>Size:</p>
+    <ul>
+        <?php if (count($sizes) > 0): ?>
+            <!-- Sản phẩm có size, cho phép người dùng chọn size -->
+            <?php foreach ($sizes as $size): ?>
+                <li>
+                    <a href="javascript:void(0)" onclick="selectSize('<?= $size['size'] ?>', <?= $size['price'] ?>)">
+                        <?= $size['size'] ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <!-- Sản phẩm không có size, hiển thị 'No Size' -->
+            <li><a href="javascript:void(0)" class="selected">No Size</a></li>
+        <?php endif; ?>
+    </ul>
+</div>
+
+
                                 <div class="number">
                                     <span class="number-buy">Số lượng</span>
                                     <input id="num" type="number" value="1" min="1" onchange="updatePrice()">
                                 </div>
+                                <p class="price">
+                                 Giá: <span id="price"><?= number_format($sizes[0]['price'], 0, ',', '.') ?></span>
+                                  <span> VNĐ</span>
+                                 <span class="gia none"><?= $sizes[0]['price'] ?></span>
+                                </p>
 
-                                <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p>
+
+                                <!-- <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p> -->
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
                                 <button class="add-cart" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                 <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
                                 <button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button>
 
-                                <script>
-                                    function updatePrice() {
-                                        var price = document.getElementById('price').innerText; // giá tiền
-                                        var num = document.querySelector('#num').value; // số lượng
-                                        var gia1 = document.querySelector('.gia').innerText;
-                                        var gia = price.match(/\d/g);
-                                        gia = gia.join("");
-                                        var tong = gia1 * num;
-                                        document.getElementById('price').innerHTML = tong.toLocaleString();
-                                    }
+                               
+    <script>
+    function selectSize(size, price) {
+    // Cập nhật giá khi chọn size
+    document.getElementById('price').innerText = price.toLocaleString();
+    document.querySelector('.gia').innerText = price;
+
+    // Đánh dấu size đã chọn
+    const sizeLinks = document.querySelectorAll('.size a');
+    sizeLinks.forEach(link => link.classList.remove('selected'));
+    event.target.classList.add('selected');
+}
+function selectSize(size, price) {
+    // Cập nhật giá khi chọn size
+    document.getElementById('price').innerText = price.toLocaleString();
+    document.querySelector('.gia').innerText = price;
+
+    // Đánh dấu size đã chọn
+    const sizeLinks = document.querySelectorAll('.size a');
+    sizeLinks.forEach(link => link.classList.remove('selected'));
+    event.target.classList.add('selected');
+}
+let isAddingToCart = false; // Biến trạng thái kiểm tra xem có đang thêm sản phẩm vào giỏ không
+function addToCart(id) {
+    if (isAddingToCart) return; // Nếu đang thêm vào giỏ, không làm gì cả
+    isAddingToCart = true; // Đánh dấu là đang thêm sản phẩm vào giỏ hàng
+
+    var num = document.querySelector('#num').value; // Lấy số lượng
+    var size = document.querySelector('.selected') ? document.querySelector('.selected').innerText : 'No Size'; // Lấy size đã chọn hoặc mặc định là 'No Size'
+    var price = document.querySelector('.gia').innerText; // Lấy giá sản phẩm đã chọn
+
+    // Kiểm tra nếu sản phẩm có size mà chưa chọn
+    if (size === 'No Size' && !document.querySelector('.selected')) {
+        alert("Vui lòng chọn size sản phẩm.");
+        isAddingToCart = false; // Reset lại trạng thái sau khi kiểm tra
+        return;
+    }
+
+    // Gửi request thêm sản phẩm vào giỏ
+    $.post('api/cookie.php', {
+        'action': 'add',
+        'id': id,
+        'num': num,
+        'size': size,  // Gửi size (No Size hoặc size đã chọn)
+        'price': price  // Gửi giá sản phẩm
+    }, function(data) {
+        alert("Sản phẩm đã được thêm vào giỏ hàng!");
+        location.reload(); // Tải lại trang sau khi thêm sản phẩm
+        isAddingToCart = false; // Reset lại trạng thái sau khi hoàn thành
+    }).fail(function() {
+        alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+        isAddingToCart = false; // Reset trạng thái khi có lỗi
+    });
+}
+
+
+    function updatePrice() {
+        var price = parseFloat(document.querySelector('.gia').innerText); // Giá đã chọn
+        var num = document.querySelector('#num').value; // Số lượng
+        var totalPrice = price * num;
+        document.getElementById('price').innerText = totalPrice.toLocaleString() ;
+    }
+
+
                                 </script>
                             </div>
                         </div>
@@ -103,72 +185,40 @@ if (isset($_GET['id'])) {
                     </div>
                 </aside>
             </section>
-            <section class="restaurants">
-                <div class="title">
-                    <h1>Thực đơn tại quán <span class="green">Thành Coffee</span></h1>
-                </div>
-                <div class="product-restaurants">
-                    <div class="row">
-                        <?php
-                        $sql = 'select * from product';
-                        $productList = executeResult($sql);
-                        $index = 1;
-                        foreach ($productList as $item) {
-                            echo '
-                                <div class="col">
-                                    <a href="details.php?id=' . $item['id'] . '">
-                                        <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
-                                        <div class="title">
-                                            <p>' . $item['title'] . '</p>
-                                        </div>
-                                        <div class="price">
-                                            <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
-                                        </div>
-                                        <div class="more">
-                                            <div class="star">
-                                                <img src="images/icon/icon-star.svg" alt="">
-                                                <span>4.6</span>
-                                            </div>
-                                            <div class="time">
-                                                <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                ';
-                        }
-                        ?>
-                    </div>
-                </div>
-            </section>
+            
         </section>
     </div>
 </main>
 <?php require_once('layout/footer.php'); ?>
 </div>
-<script type="text/javascript">
-    function addToCart(id) {
-        var num = document.querySelector('#num').value; // số lượng
-        $.post('api/cookie.php', {
-            'action': 'add',
-            'id': id,
-            'num': num
-        }, function(data) {
-            location.reload()
-        })
-    }
+<!-- <script type="text/javascript">
+function addToCart(id) {
+    var num = document.querySelector('#num').value; // số lượng
+    var size = document.querySelector('.selected') ? document.querySelector('.selected').innerText : 'No Size'; // Lấy size đã chọn
+    var price = document.querySelector('.gia').innerText; // Lấy giá sản phẩm đã chọn
 
-    function buyNow(id) {
-            $.post('api/cookie.php', {
-                'action': 'add',
-                'id': id,
-                'num': 1
-            }, function(data) {
-                location.assign("checkout.php");
-            })
-    }
-</script>
+    // Gửi request thêm sản phẩm vào giỏ
+    $.post('api/cookie.php', {
+        'action': 'add',
+        'id': id,
+        'num': num,
+        'size': size,  // gửi size
+        'price': price  // gửi giá
+    }, function(data) {
+        alert("Sản phẩm đã được thêm vào giỏ hàng!");
+        location.reload(); // Tải lại trang sau khi thêm sản phẩm
+    });
+}
+
+
+</script> -->
 </body>
 
 </html>
+<style>
+    .size a.selected {
+    color: #007bff;  /* Màu xanh cho size đã chọn */
+    font-weight: bold;
+}
+
+</style>

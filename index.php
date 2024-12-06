@@ -39,7 +39,7 @@ require_once('database/dbhelper.php');
         </div>
         <!-- END LAYOUT  -->
         <section class="main">
-            <section class="recently">
+            <!-- <section class="recently">
                 <div class="title">
                     <h1>Được yêu thích nhất</h1>
                 </div>
@@ -77,7 +77,7 @@ require_once('database/dbhelper.php');
                         ?>
                     </div>
                 </div>
-            </section>
+            </section> -->
             <!-- end Món ngon gần bạn -->
 
             <section class="restaurants">
@@ -95,11 +95,21 @@ require_once('database/dbhelper.php');
                             }
                             $limit = 12;
                             $start = ($page - 1) * $limit;
-                            $sql = "SELECT * FROM product limit $start,$limit";
-                            executeResult($sql);
-                            // $sql = 'select * from product limit $star,$limit';
-                            $productList = executeResult($sql);
-
+                            //giá thấp nhất
+                            $sql = "
+                            SELECT 
+                                product.id, 
+                                product.title, 
+                                product.thumbnail, 
+                                MIN(product_size.price) AS price 
+                            FROM product 
+                            LEFT JOIN product_size ON product.id = product_size.product_id 
+                            GROUP BY product.id 
+                            LIMIT $start, $limit
+                        ";
+                        $productList = executeResult($sql);
+                        
+                           
                             $index = 1;
                             foreach ($productList as $item) {
                                 echo '

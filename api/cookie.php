@@ -1,44 +1,65 @@
 <?php
 require_once('../utils/utility.php');
+$action = getPost('action');
+$id = getPost('id');
+$size = getPost('size');
+$num = getPost('num');
+$price = getPost('price');  // Lấy giá từ POST
 
-if(!empty($_POST)) {
-	$action = getPost('action');
-	$id = getPost('id');
-	$num = getPost('num');
+$cart = [];
+if (isset($_POST['action'])) {
+    $action = $_POST['action'];
+    $cart = isset($_COOKIE['cart']) ? json_decode($_COOKIE['cart'], true) : [];
 
-	$cart = [];
-	if(isset($_COOKIE['cart'])) {
-		$json = $_COOKIE['cart']; // lưu theo chuổi json
-		$cart = json_decode($json, true);
-	}
+    switch ($action) {
+        case 'add':
+            $id = $_POST['id'];
+            $size = $_POST['size'];  // Size sản phẩm
+            $num = $_POST['num'];  // Số lượng sản phẩm
+            $price = $_POST['price'];  // Giá sản phẩm
 
-	switch ($action) {
-		case 'add':
-			$isFind = false; // kiểm tra tồn tại ko
-			for ($i=0; $i < count($cart); $i++) { 
-                    if($cart[$i]['id'] == $id) {
-                        $cart[$i]['num'] += $num;
-                        $isFind = true; // tìm thấy
-                        break;
-                    }		
-			}
+            // Kiểm tra nếu sản phẩm với ID và size đã tồn tại trong giỏ hàng
+            $isFind = false;
+            foreach ($cart as &$item) {
+                // Kiểm tra sản phẩm với size cụ thể
+                if ($item['id'] == $id && $item['size'] == $size) {
+                    $item['num'] += $num;  // Cộng dồn số lượng nếu sản phẩm đã có trong giỏ
+                    $isFind = true;
+                    break;
+                }
+            }
 
-			if(!$isFind) { // k tìm thấy thì
-				$cart[] = [
-					'id'=>$id,
-					'num'=>$num
-				];
-			}
-			setcookie('cart', json_encode($cart), time() + 30*24*60*60, '/'); // thời gian lưu : 30ngày -24h-60p-60s
-			break;
-		case 'delete':
-			for ($i=0; $i < count($cart); $i++) { 
-				if($cart[$i]['id'] == $id) {
-					array_splice($cart, $i, 1);
-					break;
-				}
-			}
-			setcookie('cart', json_encode($cart), time() + 30*24*60*60, '/');
-		break;
-	}
+            // Nếu sản phẩm chưa có trong giỏ, thêm mới
+            if (!$isFind) {
+                $cart[] = [
+                    'id' => $id,
+                    'size' => $size,
+                    'num' => $num,
+                    'price' => $price
+                ];
+            }
+
+            // Lưu lại giỏ hàng vào cookie
+            setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
+            break;
+
+        case 'delete':
+            // Xóa sản phẩm khỏi giỏ hàng
+            $id = $_POST['id'];
+            $size = $_POST['size'];
+
+            foreach ($cart as $key => $item) {
+                if ($item['id'] == $id && $item['size'] == $size) {
+                    unset($cart[$key]);  // Xóa sản phẩm khỏi giỏ
+                    break;
+                }
+            }
+
+            // Cập nhật lại giỏ hàng vào cookie
+            setcookie('cart', json_encode(array_values($cart)), time() + 30 * 24 * 60 * 60, '/');
+            break;
+
+        // Các case khác nếu có (ví dụ: 'update' số lượng sản phẩm)
+    }
 }
+?>

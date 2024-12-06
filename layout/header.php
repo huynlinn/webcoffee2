@@ -43,22 +43,24 @@ require_once('database/dbhelper.php');
                     </ul>
                 </nav>
                 <section class="menu-right">
-                    <div class="cart">
-                        <a href="cart.php"><img src="images/icon/cart.svg" alt=""></a>
-                        <?php
-                        $cart = [];
-                        if (isset($_COOKIE['cart'])) {
-                            $json = $_COOKIE['cart'];
-                            $cart = json_decode($json, true);
-                        }
-                        $count = 0;
-                        foreach ($cart as $item) {
-                            $count += $item['num']; // đếm tổng số item
-                        }
-                        ?>
-                        <span><?= $count ?></span>
-                        
-                    </div>
+                <div class="cart">
+    <a href="cart.php"><img src="images/icon/cart.svg" alt=""></a>
+    <?php
+    $cart = [];
+    if (isset($_COOKIE['cart'])) {
+        $json = $_COOKIE['cart'];
+        $cart = json_decode($json, true);
+    }
+    $count = 0;
+    foreach ($cart as $item) {
+        $count += $item['num']; // đếm tổng số item
+    }
+    ?>
+    <?php if ($count > 0): ?>
+        <span><?= $count ?></span>
+    <?php endif; ?>
+</div>
+
                     <div class="login">
                         <?php
                         if (isset($_COOKIE['username'])) {
