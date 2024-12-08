@@ -122,12 +122,12 @@ if (count($idList) > 0) {
     <script type="text/javascript">
        function deleteFromCart(id, size) {
     $.post('api/cookie.php', {
-        'action': 'delete',  // Gửi action là 'delete'
-        'id': id,  // ID của sản phẩm
-        'size': size  // Size của sản phẩm
+        'action': 'delete',  
+        'id': id, 
+        'size': size  
     }, function(data) {
         alert("Sản phẩm đã được xóa khỏi giỏ hàng!");
-        location.reload();  // Tải lại trang sau khi xóa
+        location.reload();  
     });
 }
 

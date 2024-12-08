@@ -1,253 +1,9 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: SanomatGrabApp, -apple-system, BlinkMacSystemFont, Segoe UI,
-    PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica,
-    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+
+/* END MAIN TOP  */
+main{
+  padding-top: 200px;
 }
 
-#wrapper {
-  width: 100%;
-  margin: 0 auto;
-}
-
-#wrapper header {
-  width: 100%;
-  margin: 0 auto;
-  padding: 10px 0;
-  background-color:  white; 
-}
-
-#wrapper header .container {
-  width: 90%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 20% auto 15%; 
-  justify-items: center; 
-  align-items: center; 
-  gap: 10px; 
-}
-
-header section.logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-header section.logo a img {
-  width: 60%;
-  max-width: 200px; 
-}
-#wrapper header .container nav {
-  text-align: left;
-}
-
-#wrapper header .container nav ul {
-  display: flex;
-  justify-content: center; 
-  padding: 0;
-  margin: 0;
-}
-
-#wrapper header .container nav ul li {
-  padding: 10px;
-  list-style: none;
-  margin-left:40px;
-}
-
-#wrapper header .container nav ul li a {
-  text-decoration: none;
-  color: rgb(43, 38, 38);
-  padding: 10px;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-family: Muli, Futura, Helvetica, Arial, sans-serif;
-  position: relative;
-  text-align: left;
-}
-
-#wrapper header .container nav ul li a::after {
-  content: "";
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background-color: black;
-  display: none;
-  text-align: left;
-}
-
-#wrapper header .container nav ul li a:hover::after {
-  display: block;
-}
-
-#wrapper header .container nav ul li.nav-cha {
-  position: relative;
-  transition: all 0.4s;
-  
-}
-#wrapper header .container nav ul li ul.nav-con {
-  position: absolute;
-  display: flex;
-  flex-flow: column;
-  left: 0;
-  top: 35px; 
-  width: 150%; 
-  background-color: rgb(255, 255, 255); 
-  box-shadow: 0px 0px 5px 0px rgb(212, 212, 212);
-  z-index: 100;
-  padding: 0;
-  border-radius: 5px;
-}
-#wrapper header .container nav ul li ul.nav-con li {
-  text-align: left; 
-  padding: 10px 20px; 
-}
-#wrapper header .container nav ul li ul {
-  position: absolute;
-  display: flex;
-  flex-flow: column;
-  left: 0;
-  top: 35px;
-  width: 150%;
-  background-color: white;
-  box-shadow: 0px 0px 5px 0px rgb(212, 212, 212);
-  z-index: 100;
-  padding: 0;
-  border-radius: 5px;
-}
-
-#wrapper header .container nav ul li ul li {
-  text-align: center;
-  padding: 10px 0;
-  display: none;
-  transition: all 0.4s;
-}
-
-#wrapper header .container nav ul li ul li a {
-  text-decoration: none;
-  margin: 10px 0;
-  color: black;
-  font-weight: bold;
-}
-
-#wrapper header .container nav ul li.nav-cha:hover ul li {
-  display: block;
-}
-
-#wrapper header .container section.menu-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  margin-right: 40px;
-}
-
-#wrapper header .container section.menu-right .cart,
-#wrapper header .container section.menu-right .login {
-  padding: 7px;
-  border: 1px solid rgb( 190,165,134);
-  border-radius: 3px;
-  margin-left: 20px;
-  position: relative;
-  flex:1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
-}
-
-#wrapper header .container section.menu-right .cart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-#wrapper header .container section.menu-right .cart span {
-  position: absolute;
-  top: 0px;
-  right: 0;
-  font-weight: 500;
-  color: rgb(122, 115, 115);
-}
-
-#wrapper header .container section.menu-right .cart:hover {
-  box-shadow: 0px 0px 3px 0px grey;
-  cursor: pointer;
-}
-
-#wrapper header .container section.menu-right .cart a {
-  padding: 5px;
-  text-decoration: none;
-}
-
-#wrapper header .container section.menu-right .cart .history {
-  transition: all 0.5s;
-  opacity: 0;
-  margin-top: 0.7rem;
-  display: flex;
-  text-align: center;
-  flex-flow: column;
-  padding: 5px 0;
-  border-radius: 10%;
-  width: 100px;
-  position: absolute;
-  left: -75%;
-  top: 1.3rem;
-  z-index: 10;
-}
-
-#wrapper header .container section.menu-right .cart .history a {
-  font-weight: 600;
-  color: black;
-}
-
-#wrapper header .container section.menu-right .cart .history a:hover {
-  color: rgb(41, 39, 39);
-}
-
-#wrapper header .container section.menu-right .login:hover {
-  box-shadow: 0px 0px 3px 0px grey;
-  cursor: pointer;
-}
-
-#wrapper header .container section.menu-right .login a {
-  padding: 5px;
-  text-decoration: none;
-  color: #676767;
-  font-weight: 500;
-}
-
-#wrapper header .container section.menu-right .login:hover .logout {
-  display: block;
-}
-
-#wrapper header .container section.menu-right .login .logout {
-  display: none;
-  position: absolute;
-  top: 2.3rem;
-  left: 0px;
-  z-index: 10;
-  width: 150%;
-  border: 1px solid grey;
-  border-radius: 5px;
-  padding: 10px 0;
-}
-
-#wrapper header .container section.menu-right .login .logout a {
-  color: black;
-  font-weight: 500;
-  border-radius: 5px;
-  margin: 10px 0;
-}
-
-#wrapper header .container section.menu-right .login .logout a:hover {
-  opacity: 0.8;
-}
-
-/* END HEADER  */
 main .container {
   width: 90%;
   margin: 0px auto;
@@ -278,7 +34,6 @@ main section.search-quan input {
   border: 0;
   background-color: #f7f7f7;
 }
-/* END MAIN TOP  */
 main #ant-layout section.main-layout {
   padding: 2rem 0;
   margin: 0px auto;
@@ -357,6 +112,7 @@ section.main section.recently .title h1 {
 section.main section.recently .product-recently {
   padding-top: 2rem;
 }
+
 section.main section.recently .product-recently .row {
   display: grid;
   grid-template-columns: auto auto auto auto;
@@ -419,7 +175,7 @@ section.main section.recently .product-recently .row .col .more .time {
 section.main section.recently .product-recently .row .col .more .time img {
   width: 24px;
   height: 24px;
-}
+} */
 /* end mon ngon gần bạn  */
 
 section.main section.restaurants {
@@ -441,13 +197,23 @@ section.main section.restaurants .title h1 span {
   color: green;
 }
 section.main section.restaurants .product-restaurants {
+  margin-top: 20px;
   padding-top: 2rem;
   background-color: #f7f7f7;
+  padding-bottom: 20px; 
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-left: 2rem;
+  padding-right:2rem ;
 }
 section.main section.restaurants .product-restaurants .row  {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap:30px;
+  justify-items: center;
+  box-sizing: border-box;  /* Đảm bảo các phần tử không bị tràn */
+  margin: 0 auto;  
 }
 section.main section.restaurants .product-restaurants .row .col img {
   width: 100%;
@@ -460,6 +226,12 @@ section.main section.restaurants .product-restaurants .row .col{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
   transition: transform 0.2s ease, box-shadow 0.3s ease; 
   border:none;
+  padding-bottom: 20px;
+ 
+  text-align: center;
+  overflow: hidden;  /* Đảm bảo sản phẩm không bị tràn ra ngoài */
+  width: 100%;
+  box-sizing: border-box;
 }
 section.main section.restaurants .product-restaurants .row .col:hover {
   transform: translateY(-5px); /* Slight lift on hover */
@@ -486,19 +258,21 @@ section.main section.restaurants .product-restaurants .row .col .title p {
   margin: 5px 0;
   color: rgb(43, 31, 31);
   font-family: "Encode Sans SC", sans-serif;
+  text-align: center;
 }
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@500;600;700&display=swap");
 
 section.main section.restaurants .product-restaurants .row .col .price span {
-  
-  color: #676767;
+  text-align: center;
+  display: block;
   font-size: 20px;
   font-weight: 600;
   color: rgba(207, 16, 16, 0.815);
   font-family: "Bebas Neue", cursive;
+ 
 }
-
+/* 
 section.main section.restaurants .product-restaurants .row .col .more {
   display: flex;
   color: #676767;
@@ -536,7 +310,7 @@ section.main
   img {
   width: 24px;
   height: 24px;
-}
+} */
 .pagination{
   margin: 0px auto;
   padding-top: 2rem;
@@ -547,7 +321,7 @@ section.main
   /* justify-content: center; */
 }
 .pagination ul li{
-  background-color: rgb(0, 124, 29);
+  background-color: burlywood;
   margin: 0px 5px;
   border-radius: 2px;
   padding: 5px;
@@ -565,7 +339,7 @@ footer {
   margin-top: 1rem;
 }
 footer .container {
-  width: 90%;
+  width: 100%;
   margin: 0px auto;
   display: flex;
   flex-flow: column;
@@ -610,3 +384,100 @@ footer .container .link .icon {
 footer .container .bottom{
   padding: 20px 0;
 }
+/* Thực đơn */
+.product-recently .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 15px;
+}
+
+.product-recently .col {
+  width: 24%; /* Chiều rộng của mỗi sản phẩm, có thể điều chỉnh để phù hợp */
+  margin-bottom: 20px; /* Khoảng cách giữa các sản phẩm */
+  box-sizing: border-box;
+}
+
+.product-recently .col a {
+  display: block;
+  text-align: center; /* Căn giữa nội dung trong mỗi mục sản phẩm */
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Cải thiện hình ảnh thumbnail */
+.product-recently .col img.thumbnail {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Đảm bảo văn bản title và giá được căn chỉnh đẹp */
+.product-recently .col .title {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.product-recently .col .price {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Thêm hiệu ứng hover cho mục sản phẩm */
+.product-recently .col a:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+/* Đảm bảo tất cả các phần tử trong row được đều và không bị vỡ layout */
+.product-recently .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Khoảng cách giữa các cột */
+}
+/* Khi tìm kiếm, hiển thị các sản phẩm với kiểu dáng giống như trang chủ */
+.product-recently .col {
+  width: 24%;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  /* Trên màn hình nhỏ hơn, giảm kích thước sản phẩm */
+  .product-recently .col {
+      width: 48%; /* Hiển thị 2 cột */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Trên màn hình di động, giảm kích thước hơn nữa */
+  .product-recently .col {
+      width: 100%; /* Hiển thị 1 cột */
+  }
+}
+/* chương trình */
+.program-carousel {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.program-carousel .carousel-inner {
+  border-radius: 10px;  /* Bo góc các ảnh */
+}
+
+.program-carousel .carousel-item img {
+  width: 100%;  /* Đảm bảo ảnh hiển thị đầy đủ */
+  height: 400px; /* Đặt chiều cao cho ảnh */
+  object-fit: cover;  /* Cắt ảnh cho phù hợp với khung */
+}
+.left-align {
+  text-align: left;
+  margin-left: 15px;  /* Điều chỉnh khoảng cách nếu cần */
+  font-size: 35px;  /* Tùy chỉnh kích thước chữ nếu cần */
+  font-weight: bold;  
+  margin-top: 30px;
+}
+
+

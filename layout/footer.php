@@ -2,6 +2,7 @@
   <div class="container">
     <div class="logo">
       <!-- <a href=""><img src="images/logo-grabfood-white.svg" alt=""></a> -->
+       <p> Đặt hàng: 1900 1818</p>
       <div class="time" style="padding-left:50%;">
         <a href="https://time.is/Vietnam" id="time_is_link" rel="nofollow"></a>
         <span id="Vietnam_z418" style="font-size:40px"></span>
@@ -72,7 +73,7 @@
 
   footer .container .link .col a:hover {
     cursor: pointer;
-    color: rgb(224, 247, 222);
+    color: brown;
   }
 
   footer .container .link .col a {
@@ -105,5 +106,10 @@
 
   footer .container .bottom {
     padding: 20px 0;
+  }
+  p{
+    font-size: 18px;
+    color:brown;
+    font-weight: bold;
   }
 </style>

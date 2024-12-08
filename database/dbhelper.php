@@ -42,3 +42,31 @@ function executeSingleResult($sql)
 
 	return $row;
 }
+function executeInsert($sql) {
+    $conn = getConnection();
+    
+    if ($conn->query($sql) === TRUE) {
+        // Lấy ID của bản ghi vừa thêm vào
+        $insertedId = $conn->insert_id;
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+        $insertedId = null;
+    }
+
+    $conn->close();
+    return $insertedId;
+}
+function getConnection() {
+    $host = 'localhost';
+    $username = 'root';
+    $password = '';
+    $dbname = 'asm_php1'; // Thay thế với tên cơ sở dữ liệu của bạn
+
+    $conn = new mysqli($host, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    return $conn;
+}

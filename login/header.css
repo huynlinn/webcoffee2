@@ -1,7 +1,7 @@
     #wrapper header {
         width: 100%;
         margin: 0px auto;
-        /* background-color: rgb(170, 255, 227); */
+        
         padding: 10px 0;
     }
 
@@ -69,7 +69,7 @@
         transition: all 0.4s;
 
     }
-
+    
     #wrapper header .container nav ul li ul {
         position: absolute;
         display: flex;
@@ -82,6 +82,8 @@
         z-index: 100;
         padding: 0;
         border-radius: 5px;
+        color:red;
+        
     }
 
     #wrapper header .container nav ul li ul li {
@@ -95,12 +97,13 @@
     #wrapper header .container nav ul li ul li a {
         text-decoration: none;
         margin: 10px 0;
-        color: black;
+        color: red;
         font-weight: bold;
     }
 
     #wrapper header .container nav ul li.nav-cha:hover ul li {
         display: block;
+        
     }
 
     /* MENU CON - CHA  */

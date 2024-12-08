@@ -47,8 +47,10 @@
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = "select * from product where id_category=$id_category";
-                        $productList = executeResult($sql);
+                        $sql = "SELECT p.*, ps.price FROM product p
+                        LEFT JOIN product_size ps ON p.id = ps.product_id
+                        WHERE p.id_category = $id_category AND ps.size = 'No Size'"; // điều chỉnh điều kiện nếu cần
+                $productList = executeResult($sql);
                         foreach ($productList as $item) {
                             echo '
                                 <div class="col">
@@ -78,9 +80,16 @@
                         <?php
                         if (isset($_GET['search'])) {
                             $search = $_GET['search'];
-                            $sql = "SELECT * from product where title like '%$search%'";
+                            $sql = "
+        SELECT p.id, p.title, p.thumbnail, MIN(ps.price) AS price 
+        FROM product p
+        LEFT JOIN product_size ps ON p.id = ps.product_id
+        WHERE p.title LIKE '%$search%'
+        GROUP BY p.id
+    ";
                             $listSearch = executeResult($sql);
                             foreach ($listSearch as $item) {
+                                $price = isset($item['price']) ? number_format($item['price'], 0, ',', '.') : 'Liên hệ'; 
                                 echo '
                                 <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
@@ -116,5 +125,8 @@
         section.main section.recently .title h1 {
             border-bottom: 1px solid rgb(35, 54, 30);
         }
+       
+
+
     </style>
     <?php require('layout/footer.php') ?>

@@ -5,6 +5,7 @@ require_once('database/dbhelper.php');
 ?>
 <!-- END HEADR -->
 <main>
+    
     <div class="container">
         <div id="ant-layout">
             <section class="search-quan">
@@ -13,7 +14,7 @@ require_once('database/dbhelper.php');
                     <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
                 </form>
             </section>
-            <section class="main-layout">
+            <!-- <section class="main-layout">
                 <div class="row">
                     <?php
                     $sql = 'select * from category';
@@ -32,8 +33,46 @@ require_once('database/dbhelper.php');
                     }
                     ?>
                 </div>
-            </section>
+            </section> -->
         </div>
+        <section class="program-carousel">
+    <h2 class="left-align" >Chương trình của quán</h2>
+    <div id="programCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <a href="link-to-detail-page-1">
+                    <img src="images/icon/ct1.png" class="d-block w-100" alt="Chương trình 1">
+                </a>
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <a href="link-to-detail-page-2">
+                    <img src="images/icon/ct2.png" class="d-block w-100" alt="Chương trình 2">
+                </a>
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <a href="link-to-detail-page-3">
+                    <img src="images/icon/ct3.png" class="d-block w-100" alt="Chương trình 3">
+                </a>
+            </div>
+            <!-- Thêm nhiều slide nếu cần -->
+        </div>
+        <!-- Điều hướng carousel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#programCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#programCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+
         <div class="bg-grey">
 
         </div>
@@ -122,16 +161,7 @@ require_once('database/dbhelper.php');
                                         <div class="price">
                                             <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
                                         </div>
-                                        <div class="more">
-                                            <div class="star">
-                                                <img src="images/icon/icon-star.svg" alt="">
-                                                <span>4.6</span>
-                                            </div>
-                                            <div class="time">
-                                                <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
-                                            </div>
-                                        </div>
+                                        
                                     </a>
                                 </div>
                                 ';

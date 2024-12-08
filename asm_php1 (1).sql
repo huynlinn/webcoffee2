@@ -273,11 +273,18 @@ CREATE TABLE `product_size` (
 INSERT INTO `product_size` (`product_id`, `size`, `price`) 
 VALUES 
 (1, 'No Size', 25000),
-(2, 'S', 35000),
-(2, 'M', 30000),
+(2, 'S', 30000),
+(2, 'M', 35000),
 (2, 'L', 40000),
 (4, 'No Size', 25000),
 (5, 'No Size', 3500),
 (8, 'S', 40000),
 (8, 'M', 45000),
 (8, 'L', 50000);
+ALTER TABLE order_details ADD COLUMN size VARCHAR(50) NOT NULL;
+ALTER TABLE orders ADD COLUMN id_user INT;
+ALTER TABLE order_details
+ADD CONSTRAINT fk_user
+FOREIGN KEY (id_user) REFERENCES user(id_user)
+ON DELETE CASCADE;
+

@@ -85,11 +85,12 @@ if (isset($_GET['id'])) {
                                 <!-- <p class="price">Giá: <span id="price"><?= number_format($product['price'], 0, ',', '.') ?></span><span> VNĐ</span><span class="gia none"><?= $product['price'] ?></span></p> -->
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
                                 <button class="add-cart" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
-                                <!-- <a class="buy-now" href="checkout.php" >Mua ngay</a> -->
-                                <button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button>
+                                
+                                <a href= checkout.php><button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button></a>
 
                                
     <script>
+      
     function selectSize(size, price) {
     // Cập nhật giá khi chọn size
     document.getElementById('price').innerText = price.toLocaleString();
@@ -163,18 +164,29 @@ function addToCart(id) {
                     <h1>Gợi ý cho bạn</h1>
                     <div class="row">
                         <?php
-                        $sql = 'select * from product limit 5';
+                       $sql = "
+                       SELECT 
+                           product.id, 
+                           product.title, 
+                           product.thumbnail, 
+                           MIN(product_size.price) AS price
+                       FROM product 
+                       LEFT JOIN product_size ON product.id = product_size.product_id 
+                       WHERE product.id != $id
+                       GROUP BY product.id
+                       LIMIT 6"; 
+                        
                         $productList = executeResult($sql);
                         $index = 1;
                         foreach ($productList as $item) {
                             echo '
                                     <div class="col">
                                     <a href="details.php?id=' . $item['id'] . '">
-                                        <img src="admin/product/'.$item['thumbnail'] . '" alt="">
+                                        <img src="admin/product/' . $item['thumbnail'] . '" alt="' . $item['title'] . '">
                                         <div class="about">
                                             <div class="title">
                                                 <p>' . $item['title'] . '</p>
-                                                <span>Giá: ' . number_format($product['price'], 0, ',', '.') . ' VNĐ' . '</span>
+                                                 <span>Giá: ' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
                                             </div>
                                         </div>
                                     </a>
@@ -220,5 +232,44 @@ function addToCart(id) {
     color: #007bff;  /* Màu xanh cho size đã chọn */
     font-weight: bold;
 }
+/* Gợi ý sản phẩm */
+aside h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.col {
+    flex: 1 1 calc(33.33% - 20px); /* Ba cột cho màn hình lớn, điều chỉnh cho phù hợp với thiết bị nhỏ hơn */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.col img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.col .about {
+    margin-top: 10px;
+}
+
+.col .title p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.col .title span {
+    font-size: 14px;
+    color: #888;
+}
+
 
 </style>
