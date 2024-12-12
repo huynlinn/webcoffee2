@@ -62,71 +62,57 @@
                                         <div class="price">
                                             <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
                                         </div>
-                                        <div class="more">
-                                            <div class="star">
-                                                <img src="images/icon/icon-star.svg" alt="">
-                                                <span>4.6</span>
-                                            </div>
-                                            <div class="time">
-                                                <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
-                                            </div>
-                                        </div>
                                     </a>
                                 </div>
                                 ';
                         }
                         ?>
                         <?php
-                        if (isset($_GET['search'])) {
-                            $search = $_GET['search'];
-                            $sql = "
-        SELECT p.id, p.title, p.thumbnail, MIN(ps.price) AS price 
+if (isset($_GET['search'])) {
+    $search = trim(strip_tags($_GET['search']));
+    $sql = "
+        SELECT 
+            p.id, 
+            p.title, 
+            p.thumbnail, 
+            MIN(ps.price) AS price 
         FROM product p
         LEFT JOIN product_size ps ON p.id = ps.product_id
         WHERE p.title LIKE '%$search%'
         GROUP BY p.id
     ";
-                            $listSearch = executeResult($sql);
-                            foreach ($listSearch as $item) {
-                                $price = isset($item['price']) ? number_format($item['price'], 0, ',', '.') : 'Liên hệ'; 
-                                echo '
-                                <div class="col">
-                                    <a href="details.php?id=' . $item['id'] . '">
-                                        <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
-                                        <div class="title">
-                                            <p>' . $item['title'] . '</p>
-                                        </div>
-                                        <div class="price">
-                                            <span>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</span>
-                                        </div>
-                                        <div class="more">
-                                            <div class="star">
-                                                <img src="images/icon/icon-star.svg" alt="">
-                                                <span>4.6</span>
-                                            </div>
-                                            <div class="time">
-                                                <img src="images/icon/icon-clock.svg" alt="">
-                                                <span>15 comment</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                ';
-                            }
-                        }
-                        ?>
+    $listSearch = executeResult($sql);
+
+    if (count($listSearch) > 0) {
+        foreach ($listSearch as $item) {
+            $price = isset($item['price']) ? number_format($item['price'], 0, ',', '.') . ' VNĐ' : 'Liên hệ';
+            echo '
+                <div class="col">
+                    <a href="details.php?id=' . $item['id'] . '">
+                        <img class="thumbnail" src="admin/product/' . $item['thumbnail'] . '" alt="">
+                        <div class="title">
+                            <p>' . $item['title'] . '</p>
+                        </div>
+                        <div class="price">
+                            <span>' . $price . '</span>
+                        </div>
+                    </a>
+                </div>
+            ';
+        }
+    } else {
+        echo '<h3>Không tìm thấy sản phẩm nào phù hợp với từ khóa "' . htmlspecialchars($search) . '"</h3>';
+    }
+}
+?>
+
                     </div>
                 </div>
             </section>
         </section>
     </div>
     <style>
-        section.main section.recently .title h1 {
-            border-bottom: 1px solid rgb(35, 54, 30);
-        }
-       
-
+   
 
     </style>
     <?php require('layout/footer.php') ?>

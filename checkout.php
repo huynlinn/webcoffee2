@@ -2,6 +2,7 @@
 require_once('database/dbhelper.php');
 require_once('utils/utility.php');
 
+
 // Kiểm tra giỏ hàng
 $cart = isset($_COOKIE['cart']) ? json_decode($_COOKIE['cart'], true) : [];
 
@@ -70,10 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $note = mysqli_real_escape_string($conn, $_POST['note']);
+    $payment_method = $_POST['payment_method'];  // Lấy phương thức thanh toán
 
     // Thêm đơn hàng vào cơ sở dữ liệu
-    $orderSql = "INSERT INTO orders (fullname, email, phone_number, address, note, id_user) 
-                 VALUES ('$fullname', '$email', '$phone_number', '$address', '$note', '$id_user')";
+    $orderSql = "INSERT INTO orders (fullname, email, phone_number, address, note, id_user, payment_method) 
+                 VALUES ('$fullname', '$email', '$phone_number', '$address', '$note', '$id_user', '$payment_method')";
     $orderId = executeInsert($orderSql);
 
     // Lưu chi tiết đơn hàng vào bảng order_details
@@ -82,22 +84,82 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($value['id'] == $item['id'] && $value['size'] == $item['size']) {
                 $quantity = $value['num'];
                 $orderDetailSql = "INSERT INTO order_details (order_id, product_id, size, num, price, id_user) 
-                VALUES ($orderId, {$item['id']}, '{$item['size']}', $quantity, {$item['price']}, $id_user)";  // Thêm id_user vào đây
+                VALUES ($orderId, {$item['id']}, '{$item['size']}', $quantity, {$item['price']}, $id_user)";  
 
                 executeInsert($orderDetailSql);
             }
         }
     }
 
-    // Xóa giỏ hàng sau khi hoàn tất đơn hàng
-    setcookie('cart', '', time() - 3600, '/');
-    echo '<script>
-            alert("Đặt hàng thành công! Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.");
-            window.location="history.php";  // Chuyển tới trang lịch sử đơn hàng
-          </script>';
+    if ($payment_method == 'MOMO') {
+        $momoPaymentUrl = "https://test-payment.momo.vn/v2/gateway/api/create";
+        $partnerCode = "YOUR_PARTNER_CODE";  // Thay thế bằng Partner Code của bạn
+        $accessKey = "YOUR_ACCESS_KEY";  // Thay thế bằng Access Key
+        $secretKey = "YOUR_SECRET_KEY";  // Thay thế bằng Secret Key
+    
+        $data = [
+            "partnerCode" => $partnerCode,
+            "accessKey" => $accessKey,
+            "requestId" => time(),  // Mã yêu cầu (khác nhau mỗi lần)
+            "amount" => $total,
+            "orderId" => $orderId,
+            "orderInfo" => "Thanh toán đơn hàng $orderId",
+            "redirectUrl" => "http://yourdomain.com/checkout.php?status=success",
+            "ipnUrl" => "http://yourdomain.com/ipn",
+            "extraData" => "",
+            "requestType" => "captureWallet",
+            "lang" => "vi"
+        ];
+    
+        $rawHash = "partnerCode=" . $data['partnerCode'] .
+                   "&accessKey=" . $data['accessKey'] .
+                   "&requestId=" . $data['requestId'] .
+                   "&amount=" . $data['amount'] .
+                   "&orderId=" . $data['orderId'] .
+                   "&orderInfo=" . $data['orderInfo'] .
+                   "&redirectUrl=" . $data['redirectUrl'] .
+                   "&ipnUrl=" . $data['ipnUrl'] .
+                   "&extraData=" . $data['extraData'];
+    
+        $signature = hash_hmac("sha256", $rawHash, $secretKey);
+        $data['signature'] = $signature;
+    
+        // Gửi request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $momoPaymentUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        $result = json_decode($response, true);
+    
+        if (isset($result['resultCode']) && $result['resultCode'] == 0) {
+            $qrCodeUrl = $result['qrCodeUrl']; // Lấy URL QR code từ phản hồi
+            echo '<div style="text-align: center; margin-top: 20px;">
+                    <h3>Quét mã QR để thanh toán</h3>
+                    <img src="' . $qrCodeUrl . '" alt="QR Code" style="max-width: 300px;" />
+                    <p><strong>Số tiền:</strong> ' . number_format($total, 0, ',', '.') . ' VNĐ</p>
+                  </div>';
+        } else {
+            $errorMessage = isset($result['message']) ? $result['message'] : 'Có lỗi xảy ra khi tạo QR code.';
+            echo '<script>alert("Thanh toán thất bại: ' . $errorMessage . '"); window.location="checkout.php";</script>';
+        }
+        
+        
+    } else {
+        // Nếu người dùng chọn thanh toán khi nhận hàng
+        // Chỉ cần thông báo đơn hàng đã được đặt và xóa giỏ hàng
+        setcookie('cart', '', time() - 3600, '/');
+        echo '<script>
+                alert("Đặt hàng thành công! Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.");
+                window.location="history.php";  // Chuyển tới trang lịch sử đơn hàng
+              </script>';
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main style="padding-bottom: 4rem;">
             <section class="cart">
                 <div class="container">
-                    <h3 style="text-align: center;">Tiến hành thanh toán</h3>
+                <h4 style="text-align: center; font-size: 35px; font-weight: bold;">Tiến hành thanh toán</h4>
                     <div class="row">
                         <div class="panel panel-primary col-md-6">
                             <h4 style="padding: 2rem 0; border-bottom: 1px solid black;">Nhập thông tin mua hàng</h4>
@@ -145,7 +207,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label for="note">Ghi chú:</label>
                                     <textarea class="form-control" rows="3" name="note" id="note" placeholder="Ghi chú nếu có"></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-success">Đặt hàng</button>
+                                <div class="form-group">
+    <label for="payment_method">Chọn hình thức thanh toán:</label><br>
+    <input type="radio" id="cod" name="payment_method" value="COD" checked>
+    <label for="cod">Thanh toán khi nhận hàng</label><br>
+    <input type="radio" id="momo" name="payment_method" value="MOMO">
+    <label for="momo">Thanh toán Momo</label><br>
+</div>
+<div class="form-group">
+    <button type="submit" class="btn btn-success">Đặt hàng</button>
+</div>
+
                             </form>
                         </div>
 
@@ -189,6 +261,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </div>
             </section>
+            <div style="text-align: center;">
+    <h3>Quét mã QR để thanh toán</h3>
+    <img src="<?= $qrCodeUrl ?>" alt="QR Code" />
+</div>
+
         </main>
         <?php require_once('layout/footer.php'); ?>
     </div>

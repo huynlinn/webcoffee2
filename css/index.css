@@ -80,12 +80,57 @@ main #ant-layout section.main-layout .row img {
   border-radius: 5px;
   /* filter:drop-shadow(8px 5px 10px gray); */
 }
-.bg-grey {
-  background-color: #f7f7f7;
-  height: 10px;
-  border-radius: 3px;
-}
+
 /* <!-- END LAYOUT  --> */
+/* THỰC ĐƠN */
+.product-recently .row .col {
+  width: 100%; /* Chiều rộng tự điều chỉnh */
+  max-width: 300px; /* Đặt kích thước tối đa */
+  min-height: 350px; 
+  height: auto; 
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  padding: 10px;
+}
+.product-recently .row.col:hover{
+ 
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  
+}
+.product-recently .col img {
+  width: 100%; /* Chiều rộng đầy đủ */
+  height: 180px; /* Đặt chiều cao cố định cho hình ảnh */
+  object-fit: cover; /* Cắt hình ảnh vừa với khung */
+  margin-bottom: 10px;
+}
+.product-recently .col img {
+  width: 100%; /* Chiều rộng đầy đủ */
+  height: 180px; /* Đặt chiều cao cố định cho hình ảnh */
+  object-fit: cover; /* Cắt hình ảnh vừa với khung */
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+}
+.product-recently .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Tự động điều chỉnh cột */
+  gap: 20px; /* Khoảng cách giữa các ô */
+}
+@media screen and (max-width: 768px) {
+  .product-recently .row {
+    grid-template-columns: repeat(2, 1fr); /* Hiển thị 2 sản phẩm trên hàng */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .product-recently .row {
+    grid-template-columns: 1fr; /* Hiển thị 1 sản phẩm trên hàng */
+  }
+}
 
 section.main {
   padding: 2rem 0;
@@ -108,6 +153,7 @@ section.main section.recently .title h1 {
   margin: 0px;
   padding: 0px;
   color: black;
+  font-weight: bold;
 }
 section.main section.recently .product-recently {
   padding-top: 2rem;
@@ -119,14 +165,17 @@ section.main section.recently .product-recently .row {
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 }
-
+section.main section.recently .product-restaurants .row .col:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
 section.main section.recently .product-recently .row .col img {
   width: 100%;
   border-radius: 10px;
 }
 section.main section.recently .product-recently .row .col img.thumbnail {
-  border: 1px solid rgb(76, 78, 85);
-  transition: 0.1s;
+  border: none;
+ 
 }
 section.main section.recently .product-recently .row .col img.thumbnail:hover {
   box-shadow: 0px 0px 5px 0px grey;
@@ -152,31 +201,7 @@ section.main section.recently .product-recently .row .col .dish span {
   color: #676767;
 }
 
-section.main section.recently .product-recently .row .col .more {
-  display: flex;
-  color: #676767;
-  padding: 5px 0;
-  font-size: 18px;
-}
-section.main section.recently .product-recently .row .col .more .star {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-section.main section.recently .product-recently .row .col .more .star img {
-  width: 25px;
-  height: 25px;
-}
-section.main section.recently .product-recently .row .col .more .time {
-  display: flex;
-  padding: 0 10px;
-}
-section.main section.recently .product-recently .row .col .more .time img {
-  width: 24px;
-  height: 24px;
-} */
-/* end mon ngon gần bạn  */
+/* END THỰC ĐƠN  */
 
 section.main section.restaurants {
   padding: 3rem 0;
@@ -192,10 +217,9 @@ section.main section.restaurants .title h1 {
   margin: 0px;
   padding: 0px;
   color: black;
+  font-weight: bold;
 }
-section.main section.restaurants .title h1 span {
-  color: green;
-}
+
 section.main section.restaurants .product-restaurants {
   margin-top: 20px;
   padding-top: 2rem;
@@ -227,7 +251,7 @@ section.main section.restaurants .product-restaurants .row .col{
   transition: transform 0.2s ease, box-shadow 0.3s ease; 
   border:none;
   padding-bottom: 20px;
- 
+  transition: all 0.3s ease;
   text-align: center;
   overflow: hidden;  /* Đảm bảo sản phẩm không bị tràn ra ngoài */
   width: 100%;
@@ -241,6 +265,7 @@ section.main section.restaurants .product-restaurants .row .col img.thumbnail {
   border: 1px solid rgb(76, 78, 85);
   transition: 0.1s;
   border:none;
+  margin-top: 10px;
 }
 section.main
   section.restaurants
@@ -272,45 +297,6 @@ section.main section.restaurants .product-restaurants .row .col .price span {
   font-family: "Bebas Neue", cursive;
  
 }
-/* 
-section.main section.restaurants .product-restaurants .row .col .more {
-  display: flex;
-  color: #676767;
-  padding: 5px 0;
-  font-size: 18px;
-}
-section.main section.restaurants .product-restaurants .row .col .more .star {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-section.main
-  section.restaurants
-  .product-restaurants
-  .row
-  .col
-  .more
-  .star
-  img {
-  width: 25px;
-  height: 25px;
-}
-section.main section.restaurants .product-restaurants .row .col .more .time {
-  display: flex;
-  padding: 0 10px;
-}
-section.main
-  section.restaurants
-  .product-restaurants
-  .row
-  .col
-  .more
-  .time
-  img {
-  width: 24px;
-  height: 24px;
-} */
 .pagination{
   margin: 0px auto;
   padding-top: 2rem;
@@ -398,13 +384,14 @@ footer .container .bottom{
   box-sizing: border-box;
 }
 
+
 .product-recently .col a {
   display: block;
   text-align: center; /* Căn giữa nội dung trong mỗi mục sản phẩm */
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   padding: 10px;
   border-radius: 10px;
-  transition: all 0.3s ease;
+  
 }
 
 /* Cải thiện hình ảnh thumbnail */
@@ -438,11 +425,7 @@ footer .container .bottom{
   flex-wrap: wrap;
   gap: 15px; /* Khoảng cách giữa các cột */
 }
-/* Khi tìm kiếm, hiển thị các sản phẩm với kiểu dáng giống như trang chủ */
-.product-recently .col {
-  width: 24%;
-  margin-bottom: 20px;
-}
+
 
 @media (max-width: 1024px) {
   /* Trên màn hình nhỏ hơn, giảm kích thước sản phẩm */

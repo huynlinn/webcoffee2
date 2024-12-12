@@ -287,4 +287,7 @@ ALTER TABLE order_details
 ADD CONSTRAINT fk_user
 FOREIGN KEY (id_user) REFERENCES user(id_user)
 ON DELETE CASCADE;
+ALTER TABLE orders
+ADD COLUMN payment_method VARCHAR(50) NOT NULL;
+
 

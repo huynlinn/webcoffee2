@@ -31,7 +31,7 @@ require_once('database/dbhelper.php');
                     <ul>
                         <li><a href="index.php">Trang chủ</a></li>
                         <li class="nav-cha">
-                            <a href="thucdon.php?page=thucdon">Thực đơn</a>
+                            <a href="">Thực đơn</a>
                             <ul class="nav-con">
                                 <?php
                                     $sql="SELECT * FROM category";
