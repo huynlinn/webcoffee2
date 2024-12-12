@@ -119,7 +119,7 @@ require_once('../database/dbhelper.php');
         execute($sql);
         $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
         $user = mysqli_query($con, $sql);
-        if ($username == 'AdminThanh' && $password == 'thanh1010') {
+        if ($username == 'Admin' && $password == '1010') {
             echo '<script language="javascript">
                 alert("Đăng nhập Admin thành công!"); 
                 window.location = "../admin/index.php";
