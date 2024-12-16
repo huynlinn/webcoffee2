@@ -138,37 +138,52 @@ require_once('../database/dbhelper.php');
       $repass = $_POST['repassword'];
       $phone = $_POST['phone'];
       $email = $_POST['email'];
-      //kiểm tra trùng paswword không
-      if ($pass != $repass) {
-        echo '<script language="javascript">
-                    alert("Nhập không trùng mật khẩu, vui lòng đăng ký lại!");
-                    window.location = "reg.php";
-              </script>';
-        die();
+
+      // Kiểm tra mật khẩu có đủ yêu cầu không
+      $password_pattern = "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/";
+      if (!preg_match($password_pattern, $pass)) {
+          echo '<script language="javascript">
+                  alert("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái, số và ký tự đặc biệt!");
+                  window.location = "reg.php";
+                </script>';
+          die();
       }
-      //kiểm tra username
-      $sql = "SELECT * FROM user where username = '$username' OR email='$email'";
+
+      // Kiểm tra trùng mật khẩu không
+      if ($pass != $repass) {
+          echo '<script language="javascript">
+                  alert("Nhập lại mật khẩu không trùng, vui lòng đăng ký lại!");
+                  window.location = "reg.php";
+                </script>';
+          die();
+      }
+
+      // Kiểm tra username và email đã tồn tại chưa
+      $sql = "SELECT * FROM user WHERE username = '$username' OR email = '$email'";
       $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
-        echo '<script language="javascript">
-                 alert("Tài khoản hoặc Email đã được sử dụng!");
-                 window.location = "reg.php";
-             </script>';
-        die();
+          echo '<script language="javascript">
+                  alert("Tài khoản hoặc Email đã được sử dụng!");
+                  window.location = "reg.php";
+                </script>';
+          die();
       }
-      $sql = 'INSERT INTO user(hoten,username,password,phone,email) values ("' . $name . '","' . $username . '","' . $pass . '","' . $phone . '","' . $email . '")';
+
+      // Thêm user vào cơ sở dữ liệu
+      $sql = 'INSERT INTO user(hoten, username, password, phone, email) VALUES ("' . $name . '", "' . $username . '", "' . $pass . '", "' . $phone . '", "' . $email . '")';
       execute($sql);
+
       echo '<script language="javascript">
-                alert("Bạn đăng ký thành công!");
-                window.location = "login.php";
-             </script>';
-    } else {
+              alert("Bạn đăng ký thành công!");
+              window.location = "login.php";
+            </script>';
+  } else {
       echo '<script language="javascript">
-    alert("hãy nhập đủ thông tin!");
-    window.location = "reg.php";
-    </script>';
-    }
+              alert("Hãy nhập đủ thông tin!");
+              window.location = "reg.php";
+            </script>';
+  }
   }
   ?>
 

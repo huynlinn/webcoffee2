@@ -59,7 +59,24 @@ if (isset($_POST['action'])) {
             setcookie('cart', json_encode(array_values($cart)), time() + 30 * 24 * 60 * 60, '/');
             break;
 
-        // Các case khác nếu có (ví dụ: 'update' số lượng sản phẩm)
+        case 'update':
+            // Cập nhật số lượng sản phẩm
+            $id = $_POST['id'];
+            $size = $_POST['size'];
+            $num = $_POST['num'];  // Số lượng mới
+
+            foreach ($cart as &$item) {
+                if ($item['id'] == $id && $item['size'] == $size) {
+                    $item['num'] = $num;  // Cập nhật số lượng
+                    break;
+                }
+            }
+
+            // Cập nhật lại giỏ hàng vào cookie
+            setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
+            break;
+
+        // Các case khác nếu có
     }
 }
 ?>
