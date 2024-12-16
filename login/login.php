@@ -1,9 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
 require_once('../database/config.php');
 require_once('../database/dbhelper.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -18,6 +20,7 @@ require_once('../database/dbhelper.php');
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="plugin/fontawesome/css/all.css">
+   
 
     <link rel="stylesheet" href="header.css">
 
@@ -29,7 +32,7 @@ require_once('../database/dbhelper.php');
         <header>
             <div class="container">
                 <section class="logo">
-                    <a href="../index.php"><img src="images/logo.svg" alt=""></a>
+                <a href="../index.php"><img src="../images/logo.svg" alt="" width="60%"></a>
                 </section>
                 <nav>
                     <ul>

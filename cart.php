@@ -32,6 +32,7 @@ if (count($idList) > 0) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="plugin/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/cart.css">
+    
     <title>Giỏ hàng</title>
 </head>
 

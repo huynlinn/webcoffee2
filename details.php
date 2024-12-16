@@ -16,6 +16,8 @@ if (isset($_GET['id'])) {
     $sqlSizes = 'SELECT size, price FROM product_size WHERE product_id=' . $id;
     $sizes = executeResult($sqlSizes);
 }
+//buy now
+
 ?>
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=264339598396676&autoLogAppEvents=1" nonce="8sTfFiF4"></script>
@@ -86,7 +88,7 @@ if (isset($_GET['id'])) {
                                 <!-- <a class="add-cart" href="" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</a> -->
                                 <button class="add-cart" onclick="addToCart(<?= $id ?>)"><i class="fas fa-cart-plus"></i>Thêm vào giỏ hàng</button>
                                 
-                                <a href= checkout.php><button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button></a>
+                                <!-- <a href= checkout.php><button class="buy-now" onclick="buyNow(<?= $id ?>)">Mua ngay</button></a> -->
 
                                
     <script>
@@ -151,6 +153,25 @@ function addToCart(id) {
         var totalPrice = price * num;
         document.getElementById('price').innerText = totalPrice.toLocaleString() ;
     }
+    //buy now
+    function buyNow(id) {
+    var num = document.querySelector('#num').value; // Lấy số lượng
+    var size = document.querySelector('.selected') ? document.querySelector('.selected').innerText : 'No Size'; // Lấy size đã chọn hoặc mặc định là 'No Size'
+    var price = document.querySelector('.gia').innerText; // Lấy giá sản phẩm đã chọn
+
+    // Kiểm tra nếu sản phẩm có size mà chưa chọn
+    if (size === 'No Size' && !document.querySelector('.selected')) {
+        alert("Vui lòng chọn size sản phẩm.");
+        return;
+    }
+
+    // Chuyển hướng đến trang thanh toán và truyền các thông tin qua query string
+    var checkoutUrl = 'checkout.php?id=' + id + '&num=' + num + '&size=' + encodeURIComponent(size) + '&price=' + price;
+    window.location.href = checkoutUrl; // Chuyển hướng đến trang thanh toán
+}
+
+   
+
 
 
                                 </script>

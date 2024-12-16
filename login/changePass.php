@@ -17,18 +17,18 @@ require_once('../database/dbhelper.php');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="header.css">
-
+    <link rel="stylesheet" href="css/header.css">
+    
     <title>Đăng nhập</title>
 </head>
 <body>
-    <div id="wrapper" style="padding-bottom: 4rem;">
+    <div id="wrapper" ">
     <header>
             <div class="container">
                 <section class="logo">
-                    <a href="../index.php"><img src="../images/logo-grabfood.svg" alt=""></a>
+                    <a href="../index.php"><img src="images/logo.svg" alt=""></a>
                 </section>
-                <nav style="padding: 15px 10px;">
+                <nav ">
                     <ul>
                         <li><a href="../index.php">Trang chủ</a></li>
                         <li class="nav-cha">

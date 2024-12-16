@@ -95,3 +95,4 @@ require_once('database/dbhelper.php');
                 </section>
             </div>
         </header>
+    </div>
