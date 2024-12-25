@@ -1,6 +1,7 @@
 <?php
 require_once('../database/dbhelper.php');
-$id = $title = $price = $number = $thumbnail = $content = $id_category = "";
+checkLogin();
+$id = $title = $size = $price = $number = $thumbnail = $content = $id_category = "";
 if (!empty($_POST['title'])) {
     if (isset($_POST['title'])) {
         $title = $_POST['title'];
@@ -18,6 +19,11 @@ if (!empty($_POST['title'])) {
         $number = $_POST['number'];
         $number = str_replace('"', '\\"', $number);
     }
+
+    if (isset($_POST['size'])) {
+        $size = $_POST['size'];
+        $size = str_replace('"', '\\"', $size);
+    }
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         // Dữ liệu gửi lên server không bằng phương thức post
         echo "Phải Post dữ liệu";
@@ -32,7 +38,7 @@ if (!empty($_POST['title'])) {
     }
 
     // Kiểm tra dữ liệu có bị lỗi không
-    if ($_FILES["thumbnail"]['error'] != 0) {
+    if (isset($_FILES["thumbnail"]) && $_FILES["thumbnail"]['name'] !== '' && $_FILES["thumbnail"]['error'] != 0) {
         echo "Dữ liệu upload bị lỗi";
         die;
     }
@@ -102,11 +108,11 @@ if (!empty($_POST['title'])) {
         // Lưu vào DB
         if ($id == '') {
             // Thêm danh mục
-            $sql = 'insert into product(title, price, number, thumbnail, content, id_category, created_at, updated_at) 
-            values ("' . $title . '","' . $price . '","' . $number . '","' . $target_file . '","' . $content . '","' . $id_category . '","' . $created_at . '","' . $updated_at . '")';
+            $sql = 'insert into product(title, price, number, thumbnail, content, id_category, size, created_at, updated_at) 
+            values ("' . $title . '","' . $price . '","' . $number . '","' . $target_file . '","' . $content . '","' . $id_category . '","' . '","'.$size .'","'.$created_at . '","' . $updated_at . '")';
         } else {
             // Sửa danh mục
-            $sql = 'update product set title="' . $title . '",price="' . $price . '",number="' . $number . '",thumbnail="' . $target_file . '",content="' . $content . '",id_category="' . $id_category . '", updated_at="' . $updated_at . '" where id=' . $id;
+            $sql = 'update product set title="' . $title . '",price="' . $price . '",number="' . $number . '",thumbnail="' . $target_file . '",content="' . $content . '",id_category="' . $id_category . '",size="'.$size.'", updated_at="' . $updated_at . '" where id=' . $id;
         }
         execute($sql);
         header('Location: index.php');
@@ -125,6 +131,7 @@ if (isset($_GET['id'])) {
         $thumbnail = $product['thumbnail'];
         $content = $product['content'];
         $id_category = $product['id_category'];
+        $size = $product['size'];
         $created_at = $product['created_at'];
         $updated_at = $product['updated_at'];
     }
@@ -162,7 +169,13 @@ if (isset($_GET['id'])) {
             <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="user/">Quản lý người dùng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="../logout.php">Đăng xuất</a>
         </li>
     </ul>
     <div class="container">
@@ -201,6 +214,10 @@ if (isset($_GET['id'])) {
                     <div class="form-group">
                         <label for="name">Số Lượng Sản Phẩm:</label>
                         <input required="true" type="number" class="form-control" id="number" name="number" value="<?= $number ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Size Sản Phẩm:</label>
+                        <input required="true" type="text" class="form-control" id="size" name="size" value="<?= $size ?>">
                     </div>
                     <div class="form-group">
                         <!-- <label for="exampleFormControlFile1">Thumbnail:<label> -->

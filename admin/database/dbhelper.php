@@ -7,6 +7,7 @@ function execute($sql)
 	// open connection to database
 	$con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
 	//insert, update, delete
+	mysqli_set_charset($con, "utf8");
 	mysqli_query($con, $sql);
 
 	//close connection
@@ -18,6 +19,7 @@ function executeResult($sql)
 	//save data into table
 	// open connection to database
 	$con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+	mysqli_set_charset($con, "utf8");
 	//insert, update, delete
 	$result = mysqli_query($con, $sql);
 	$data   = [];
@@ -36,6 +38,7 @@ function executeSingleResult($sql)
 	//save data into table
 	// open connection to database
 	$con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+	mysqli_set_charset($con, "utf8");
 	//insert, update, delete
 	$result = mysqli_query($con, $sql);
 	$row    = mysqli_fetch_array($result, 1);
@@ -44,4 +47,16 @@ function executeSingleResult($sql)
 	mysqli_close($con);
 
 	return $row;
+}
+
+function checkLogin()
+{
+    if (!isset($_SESSION['user'])) {
+        header("Location: ../../index.php");
+    }
+    $user = isset($_SESSION['user']) ? $_SESSION['user'] : [];
+
+    if ($user['level'] == 2) {
+        header("Location: ../../index.php");
+    }
 }

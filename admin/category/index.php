@@ -1,5 +1,6 @@
 <?php
 require_once('../database/dbhelper.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,16 +20,22 @@ require_once('../database/dbhelper.php');
 <body>
     <ul class="nav nav-tabs">
     <li class="nav-item">
-            <a class="nav-link" href="../index.php">Thống kê</a>
+            <a class="nav-link" href="/coffeshop/admin/index.php">Thống kê</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="../category/">Quản lý danh mục</a>
+            <a class="nav-link active" href="/coffeshop/admin/category/">Quản lý danh mục</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
+            <a class="nav-link" href="/coffeshop/admin/product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="/coffeshop/admin/dashboard.php">Quản lý giỏ hàng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="/coffeshop/admin/user">Quản lý người dùng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="../logout.php">Đăng xuất</a>
         </li>
     </ul>
     <div class="container">

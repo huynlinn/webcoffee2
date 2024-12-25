@@ -33,6 +33,12 @@
         <li class="nav-item ">
             <a class="nav-link active" href="dashboard.php">Quản lý giỏ hàng</a>
         </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="user/">Quản lý người dùng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="logout.php">Đăng xuất</a>
+        </li>
     </ul>
     <div class="container">
         <div class="panel panel-primary">
@@ -47,6 +53,7 @@
                                 <td width="50px">STT</td>
                                 <td width="200px">Tên User</td>
                                 <td>Tên Sản Phẩm/<br>Số lượng</td>
+                                <td>Size</td>
                                 <td>Tổng tiền</td>
                                 <td width="250px">Địa chỉ</td>
                                 <td>Số điện thoại</td>
@@ -66,8 +73,13 @@
                                 $limit = 10;
                                 $start = ($page - 1) * $limit;
 
-                                $sql = "SELECT * from orders, order_details, product
-                                where order_details.order_id=orders.id and product.id=order_details.product_id ORDER BY order_date DESC limit $start,$limit ";
+                                $sql = "SELECT orders.*, order_details.*, product.*, order_details.size AS o_size
+        FROM orders
+        JOIN order_details ON order_details.order_id = orders.id
+        JOIN product ON product.id = order_details.product_id
+        ORDER BY order_date DESC
+        LIMIT $start, $limit";
+
                                 $order_details_List = executeResult($sql);
                                 $total = 0;
                                 $count = 0;
@@ -78,6 +90,7 @@
                                             <td width="50px">' . (++$count) . '</td>
                                             <td style="text-align:center">' . $item['fullname'] . '</td>
                                             <td>' . $item['title'] . '<br>(<strong>' . $item['num'] . '</strong>)</td>
+                                            <td width="100px">' . $item['o_size'] . '</td>
                                             <td class="b-500 red">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
                                             <td width="100px">' . $item['address'] . '</td>
                                             <td width="100px">' . $item['phone_number'] . '</td>

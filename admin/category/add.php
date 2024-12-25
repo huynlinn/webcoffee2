@@ -1,5 +1,6 @@
 <?php
 require_once('../database/dbhelper.php');
+checkLogin();
 $id = $name = '';
 if (!empty($_POST['name'])) {
     $name = '';
@@ -66,7 +67,13 @@ if (isset($_GET['id'])) {
             <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="user/">Quản lý người dùng</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link " href="../logout.php">Đăng xuất</a>
         </li>
     </ul>
     <div class="container">

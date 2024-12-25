@@ -1,7 +1,7 @@
 <?php
 require_once('../database/dbhelper.php');
-
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -13,145 +13,128 @@ require_once('../database/dbhelper.php');
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScrseipt -->
+    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="../index.php">Thống kê</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " href="../category/">Quản lý Danh Mục</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="../product/">Quản lý sản phẩm</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
-        </li>
+        <!-- Navigation items -->
+        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/index.php">Thống kê</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/category/">Quản lý Danh Mục</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/coffeshop/admin/product/">Quản lý sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/dashboard.php">Quản lý giỏ hàng</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/user">Quản lý người dùng</a></li>
+        <li class="nav-item"><a class="nav-link" href="../logout.php">Đăng xuất</a></li>
     </ul>
+
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h2 class="text-center">Quản lý Sản Phẩm</h2>
             </div>
-            <div class="panel-body"></div>
-            <a href="add.php">
-                <button class=" btn btn-success" style="margin-bottom:20px">Thêm Sản Phẩm</button>
-            </a>
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr style="font-weight: 500;">
-                        <td width="70px">STT</td>
-                        <td>Thumbnail</td>
-                        <td>Tên Sản Phẩm</td>
-                        <td>Giá</td>
-                        <td>Số lượng</td>
-                        <td>Nội dung</td>
-                        <td>ID</td>
-                        <td width="50px"></td>
-                        <td width="50px"></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Lấy danh sách Sản Phẩm
-                    if (!isset($_GET['page'])) {
-                        $pg = 1;
-                        echo 'Bạn đang ở trang: 1';
-                    } else {
-                        $pg = $_GET['page'];
-                        echo 'Bạn đang ở trang: ' . $pg;
-                    }
-
-                    try {
-
-                        if (isset($_GET['page'])) {
-                            $page = $_GET['page'];
-                        } else {
-                            $page = 1;
-                        }
+            <div class="panel-body">
+                <a href="add.php">
+                    <button class="btn btn-success" style="margin-bottom: 20px;">Thêm Sản Phẩm</button>
+                </a>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr style="font-weight: 500;">
+                            <td width="70px">STT</td>
+                            <td>Thumbnail</td>
+                            <td>Tên Sản Phẩm</td>
+                            <td>Giá</td>
+                            <td>Nội dung</td>
+                            <td>ID Danh Mục</td>
+                            <td width="50px"></td>
+                            <td width="50px"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
                         $limit = 5;
+                        $page = isset($_GET['page']) ? $_GET['page'] : 1;
                         $start = ($page - 1) * $limit;
-                        $sql = "SELECT * FROM product limit $start,$limit";
-                        executeResult($sql);
-                        // $sql = 'select * from product limit $star,$limit';
+
+                        // SQL Query: Lấy giá thấp nhất của sản phẩm dựa trên bảng product_size
+                        $sql = "
+    SELECT 
+        product.id, 
+        product.title, 
+        product.thumbnail, 
+        product.content, 
+        product.id_category, 
+        MIN(product_size.price) AS price 
+    FROM product 
+    LEFT JOIN product_size ON product.id = product_size.product_id 
+    GROUP BY product.id 
+    LIMIT $start, $limit
+";
+
                         $productList = executeResult($sql);
+                        
 
-                        $index = 1;
-                        foreach ($productList as $item) {
-                            echo '  <tr>
-                    <td>' . ($index++) . '</td>
-                    <td style="text-align:center">
-                        <img src="' . $item['thumbnail'] . '" alt="" style="width: 50px">
-                    </td>
-                    <td>' . $item['title'] . '</td>
-                    <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
-                    <td>' . $item['number'] . '</td>
-                    <td>' . $item['content'] . '</td>
-                    <td>' . $item['id_category'] . '</td>
-                    <td>
-                        <a href="add.php?id=' . $item['id'] . '">
-                            <button class=" btn btn-warning">Sửa</button> 
-                        </a> 
-                    </td>
-                    <td>            
-                    <button class="btn btn-danger" onclick="deleteProduct(' . $item['id'] . ')">Xoá</button>
-                    </td>
-                </tr>';
+                        if (!empty($productList)) {
+                            $index = $start + 1;
+                            foreach ($productList as $item) {
+                                echo '<tr>
+                                    <td>' . $index++ . '</td>
+                                    <td style="text-align: center;">
+                                        <img src="' . htmlspecialchars($item['thumbnail']) . '" alt="" style="width: 50px;">
+                                    </td>
+                                    <td>' . htmlspecialchars($item['title']) . '</td>
+                                    <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
+                                    <td>' . htmlspecialchars($item['content']) . '</td>
+                                    <td>' . htmlspecialchars($item['id_category']) . '</td>
+                                    <td>
+                                        <a href="add.php?id=' . $item['id'] . '">
+                                            <button class="btn btn-warning">Sửa</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" onclick="deleteProduct(' . $item['id'] . ')">Xoá</button>
+                                    </td>
+                                </tr>';
+                            }
+                        } else {
+                            echo '<tr><td colspan="9" class="text-center">Không có sản phẩm nào</td></tr>';
                         }
-                    } catch (Exception $e) {
-                        die("Lỗi thực thi sql: " . $e->getMessage());
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <ul class="pagination">
+                <?php
+                $sql = "SELECT COUNT(*) AS total FROM product";
+                $result = executeSingleResult($sql);
+                $totalRecords = $result['total'];
+                $totalPages = ceil($totalRecords / $limit);
+
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    if ($i == $page) {
+                        echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+                    } else {
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
                     }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-
-        <ul class="pagination">
-            <?php
-            $sql = "SELECT * FROM `product`";
-            $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result)) {
-                $numrow = mysqli_num_rows($result);
-                $current_page = ceil($numrow / 5);
-                // echo $current_page;
-            }
-            for ($i = 1; $i <= $current_page; $i++) {
-                // Nếu là trang hiện tại thì hiển thị thẻ span
-                // ngược lại hiển thị thẻ a
-                if ($i == $current_page) {
-                    echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                } else {
-                    echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>
-                    ';
                 }
-            }
-            ?>
-        </ul>
+                ?>
+            </ul>
+        </div>
     </div>
 
-    </div>
     <script type="text/javascript">
         function deleteProduct(id) {
-            var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')
-            if (!option) {
-                return;
-            }
+            var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?');
+            if (!option) return;
 
-            console.log(id)
-            //ajax - lenh post
             $.post('ajax.php', {
-                'id': id,
-                'action': 'delete'
+                id: id,
+                action: 'delete'
             }, function(data) {
-                location.reload()
-            })
+                location.reload();
+            });
         }
     </script>
 </body>

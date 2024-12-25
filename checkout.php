@@ -2,13 +2,16 @@
 require_once('database/dbhelper.php');
 require_once('utils/utility.php');
 
+
 //buynow
+
 
 // Kiểm tra giỏ hàng
 $cart = isset($_COOKIE['cart']) ? json_decode($_COOKIE['cart'], true) : [];
 if (!$cart) {
     $cart = [];
 }
+
 
 $username = isset($_COOKIE['username']) ? filter_var($_COOKIE['username'], FILTER_SANITIZE_STRING) : '';
 if (empty($username)) {
@@ -20,12 +23,16 @@ if (empty($username)) {
 }
 
 
+
+
 // Lấy id_user từ username trong cookie
 $username = $_COOKIE['username'];  // Lấy tên đăng nhập từ cookie
+
 
 // Lấy id_user từ bảng user dựa trên username
 $sqlUser = "SELECT id_user FROM user WHERE username = '$username'";
 $resultUser = executeResult($sqlUser);
+
 
 if (count($resultUser) == 0) {
     // Nếu không tìm thấy user, báo lỗi
@@ -33,13 +40,16 @@ if (count($resultUser) == 0) {
     exit();
 }
 
+
 $id_user = $resultUser[0]['id_user'];  // Lấy id_user của người dùng
+
 
 // Lấy danh sách sản phẩm trong giỏ hàng
 $idList = [];
 foreach ($cart as $item) {
     $idList[] = $item['id'];
 }
+
 
 $cartList = [];
 if (count($idList) > 0) {
@@ -52,13 +62,14 @@ if (count($idList) > 0) {
     $cartList = [];
 }
 
+
 // Tính tổng số tiền đơn hàng
 function calculateTotal($cart, $cartList) {
     $total = 0;
     foreach ($cartList as $item) {
         foreach ($cart as $value) {
             if (isset($value['id'], $value['size'], $value['num']) &&
-                $value['id'] == $item['id'] && 
+                $value['id'] == $item['id'] &&
                 $value['size'] == $item['size']) {
                 $total += intval($value['num']) * floatval($item['price']);
             }
@@ -68,10 +79,14 @@ function calculateTotal($cart, $cartList) {
 }
 
 
+
+
 $total = calculateTotal($cart, $cartList);
+
 
 // Kết nối cơ sở dữ liệu
 $conn = getConnection();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Lọc dữ liệu người dùng và bảo vệ khỏi SQL Injection
@@ -81,74 +96,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = trim(mysqli_real_escape_string($conn, $_POST['address']));
     $note = trim(mysqli_real_escape_string($conn, $_POST['note']));
 
+
     if (!$email || !$phone_number) {
         echo '<script>alert("Thông tin email hoặc số điện thoại không hợp lệ!");</script>';
         exit();
     }
 
+
     $payment_method = $_POST['payment_method'];  // Lấy phương thức thanh toán
 
+
     // Thêm đơn hàng vào cơ sở dữ liệu
-    $orderSql = "INSERT INTO orders (fullname, email, phone_number, address, note, id_user, payment_method) 
+    $orderSql = "INSERT INTO orders (fullname, email, phone_number, address, note, id_user, payment_method)
     VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($orderSql);
     $stmt->bind_param('sssssis', $fullname, $email, $phone_number, $address, $note, $id_user, $payment_method);
     $stmt->execute();
     $orderId = $stmt->insert_id;
 
+
     // Lưu chi tiết đơn hàng vào bảng order_details
     foreach ($cartList as $item) {
         foreach ($cart as $value) {
             if ($value['id'] == $item['id'] && $value['size'] == $item['size']) {
                 $quantity = $value['num'];
-                $orderDetailSql = "INSERT INTO order_details (order_id, product_id, size, num, price, id_user) 
+                $orderDetailSql = "INSERT INTO order_details (order_id, product_id, size, num, price, id_user)
                 VALUES ($orderId, {$item['id']}, '{$item['size']}', $quantity, {$item['price']}, $id_user)";  
+
 
                 executeInsert($orderDetailSql);
             }
         }
     }
 
+
     // Kiểm tra phương thức thanh toán và hiển thị thông báo
     if ($payment_method == 'COD') {
         // Xóa giỏ hàng (cookie)
         setcookie('cart', '', time() - 3600, '/'); // Xóa giỏ hàng trong cookie
 
+
         // Hiển thị thông báo thành công khi chọn thanh toán khi nhận hàng (COD)
         echo '<script>
                 alert("Đặt hàng thành công! Chúng tôi sẽ liên hệ với bạn để giao hàng.");
-                window.location = "cart.php"; 
+                window.location = "cart.php";
               </script>';
         exit();
     }
-    // Kiểm tra phương thức thanh toán và hiển thị thông báo
-    if ($payment_method == 'COD') {
-        // Hiển thị thông báo thành công khi chọn thanh toán khi nhận hàng (COD)
-        echo '<script>
-                alert("Đặt hàng thành công! Chúng tôi sẽ liên hệ với bạn để giao hàng.");
-                window.location = "index.php"; 
-              </script>';
-        exit();
-    }
+   
     // $hashdata = urldecode(http_build_query($inputData));
     if ($payment_method == 'VNPay') {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
 
+
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "https://localhost/thanks";  // Địa chỉ trả về của bạn sau khi thanh toán
+        $vnp_Returnurl = "https://localhost/coffeshop/vnpay_php/vnpay_return.php"; 
         $vnp_TmnCode = "TLJF1MV9";  // Mã website tại VNPAY
-        $vnp_HashSecret = " 4JWUX5MRN8HWL8DTDOMCXIXS5E8EABTB";  // Chuỗi bí mật từ VNPAY
-    
+        $vnp_HashSecret = "4JWUX5MRN8HWL8DTDOMCXIXS5E8EABTB";  // Chuỗi bí mật từ VNPAY
+   
         $vnp_TxnRef = $orderId;  // Mã đơn hàng
         $vnp_OrderInfo = 'Thanh toán đơn hàng ' . $orderId;
         $vnp_OrderType = 'billpayment';
-        $vnp_Amount = $total * 100;  // VNPay yêu cầu giá trị là đồng (100 VNĐ = 1VND)
+        $vnp_Amount = $total *100;  // VNPay yêu cầu giá trị là đồng (100 VNĐ = 1VND)
         $vnp_Locale = 'vn';  // Ngôn ngữ
         $vnp_BankCode = 'NCB';  // Mã ngân hàng, ví dụ 'NCB'
-    
+   
         // Thêm địa chỉ IP
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-        
+       
         // Tạo các tham số của VNPay
         $inputData = array(
             "vnp_Version" => "2.1.0",
@@ -163,35 +178,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef
+            
         );
-    
+   
         // Thêm mã ngân hàng nếu có
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
         }
        
-        // Sắp xếp các tham số theo thứ tự
        // Sắp xếp các tham số theo thứ tự từ A-Z
-       ksort($inputData);
-       $hashdata = "";
-       foreach ($inputData as $key => $value) {
-           $hashdata .= $key . '=' . $value . '&'; // Nối tham số theo đúng định dạng
-       }
-       $hashdata = rtrim($hashdata, '&'); // Xóa ký tự '&' thừa ở cuối
-       
+       ksort($inputData);  // Sắp xếp các tham số theo thứ tự
+        $hashdata = "";
+    foreach ($inputData as $key => $value) {
+         $hashdata .= $key . '=' . $value . '&';  // Nối tham số
+    }
+    $hashdata = rtrim($hashdata, "&");//     Xóa ký tự '&' thừa ở cuối
+   
        // Tính toán chữ ký HMAC-SHA512
-       $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+       $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
        
        // Thêm chữ ký vào URL thanh toán
-       $vnp_Url .= '?' . $hashdata . '&vnp_SecureHash=' . $vnpSecureHash;
+       $vnp_Url .= "?" . http_build_query($inputData) . "&vnp_SecureHash=" . $vnpSecureHash;    
+      
+       
 
-    
+       
+
+
         // Chuyển hướng đến VNPay
         header('Location: ' . $vnp_Url);
         exit();  // Dừng mã PHP để không thực thi thêm mã phía dưới
     }
-    
-    
+   
+   
 }
 ?>
 <!DOCTYPE html>
@@ -209,9 +228,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Thanh toán</title>
 </head>
 
+
 <body>
     <div id="wrapper">
         <?php require_once('layout/header.php'); ?>
+
 
         <main style="padding-bottom: 4rem;">
             <section class="cart">
@@ -249,12 +270,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <label for="vnpay">Thanh toán VNPay</label><br>
 </div>
 
+
 <div class="form-group">
     <button type="submit" class="btn btn-success">Đặt hàng</button>
 </div>
 
+
                             </form>
                         </div>
+
 
                         <div class="panel panel-primary col-md-6">
                             <h4 style="padding: 2rem 0; border-bottom: 1px solid black;">Đơn hàng của bạn</h4>
@@ -298,12 +322,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </section>
            
 
+
         </main>
         <?php require_once('layout/footer.php'); ?>
     </div>
 </body>
 
+
 </html>
+
+
 
 
 <style>
@@ -313,17 +341,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         color: blue;
     }
 
+
     .b-500 {
         font-weight: 500;
     }
 
+
     .bold {
         font-weight: bold;
     }
+
 
     .red {
         color: rgba(207, 16, 16, 0.815);
     }
 </style>
 
+
 </html>
+

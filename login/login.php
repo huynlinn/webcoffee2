@@ -125,7 +125,7 @@ require_once('../database/dbhelper.php');
         if ($username == 'Admin' && $password == '1010') {
             echo '<script language="javascript">
                 alert("Đăng nhập Admin thành công!"); 
-                window.location = "../admin/index.php";
+                window.location = "../admin/category/index.php";
             </script>';
             $username = trim(strip_tags($_POST['username']));
             $password = trim(strip_tags($_POST['password']));
