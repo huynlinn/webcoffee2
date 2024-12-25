@@ -77,9 +77,9 @@
 
     <?php
     //nhúng thư viện vào để dùng
-    require "PHPMailer-master/src/PHPMailer.php";
-    require "PHPMailer-master/src/SMTP.php";
-    require 'PHPMailer-master/src/Exception.php';
+    require "libs/PHPMailer-master/src/PHPMailer.php";
+require "libs/PHPMailer-master/src/SMTP.php";
+require "libs/PHPMailer-master/src/Exception.php";
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $name = $_POST['name']; // lấy ra tên của bạn
@@ -95,8 +95,8 @@
             $mail->CharSet  = "utf-8";
             $mail->Host = 'smtp.gmail.com';  // khai báo SMTP servers
             $mail->SMTPAuth = true; // Enable authentication
-            $nguoigui = 'hellook332@gmail.com'; // Tài khoản Email
-            $matkhau = 'thanh1010'; // Mật khẩu Email
+            $nguoigui = 'kqtran123@gmail.com'; // Tài khoản Email
+            $matkhau = 'ksvt azaw xqzi thjl'; // Mật khẩu Email
             $mail->SMTPSecure = 'ssl';  // encryption TLS/SSL 
             $mail->Port = 465;  // Port kết nối: khai báo 465 hoặc 587                
 
@@ -107,7 +107,7 @@
             $mail->Password = $matkhau;   // SMTP password
             $mail->setFrom($nguoigui, $tennguoigui); //mail và tên người nhận 
             $to = $email; // Email cần gửi đến lấy từ form nhập
-            $to_name = "Nguyễn Đăng Thành"; // Tên người cần gửi đến
+            $to_name = "coffeeshop"; // Tên người cần gửi đến
 
             // Content 
             $mail->addAddress($to, $to_name); //mail và tên người nhận  

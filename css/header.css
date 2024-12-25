@@ -126,6 +126,7 @@ body {
   nav ul li a:hover {
     color:brown;
     border-radius: 5px; /* Bo góc */
+    text-decoration: none;
   }
   .nav-cha {
     position: relative; /* Thêm để menu con có thể được căn đúng vị trí */
