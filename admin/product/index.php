@@ -20,11 +20,11 @@ require_once('../database/dbhelper.php');
 <body>
     <ul class="nav nav-tabs">
         <!-- Navigation items -->
-        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/index.php">Thống kê</a></li>
-        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/category/">Quản lý Danh Mục</a></li>
-        <li class="nav-item"><a class="nav-link active" href="/coffeshop/admin/product/">Quản lý sản phẩm</a></li>
-        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/dashboard.php">Quản lý giỏ hàng</a></li>
-        <li class="nav-item"><a class="nav-link" href="/coffeshop/admin/user">Quản lý người dùng</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/index.php">Thống kê</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/category/">Quản lý Danh Mục</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/coffeeshop/admin/product/">Quản lý sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/dashboard.php">Quản lý giỏ hàng</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/user">Quản lý người dùng</a></li>
         <li class="nav-item"><a class="nav-link" href="../logout.php">Đăng xuất</a></li>
     </ul>
 

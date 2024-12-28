@@ -18,7 +18,7 @@ require_once('../database/dbhelper.php');
         <header>
             <div class="container">
                 <section class="logo">
-                    <a href="../index.php"><img src="../images/logo-grabfood.svg" alt=""></a>
+                    <a href="../index.php"><img src="images/logo.svg" alt=""></a>
                 </section>
                 <nav>
                     <ul>
@@ -109,9 +109,9 @@ require_once('../database/dbhelper.php');
         </div>
         <?php
         //nhúng thư viện vào để dùng
-        require "../PHPMailer-master/src/PHPMailer.php";
-        require "../PHPMailer-master/src/SMTP.php";
-        require '../PHPMailer-master/src/Exception.php';
+        require $_SERVER['DOCUMENT_ROOT'] . '/coffeeshop/libs/PHPMailer-master/src/PHPMailer.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/coffeeshop/libs/PHPMailer-master/src/SMTP.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/coffeeshop/libs/PHPMailer-master/src/Exception.php';
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $name = $_POST['name']; // lấy ra tên của bạn
@@ -142,19 +142,19 @@ require_once('../database/dbhelper.php');
                 $mail->CharSet  = "utf-8";
                 $mail->Host = 'smtp.gmail.com';  // khai báo SMTP servers
                 $mail->SMTPAuth = true; // Enable authentication
-                $nguoigui = 'hellook332@gmail.com'; // Tài khoản Email
-                $matkhau = 'thanh1010'; // Mật khẩu Email
+                $nguoigui = 'kqtran123@gmail.com';
+            $matkhau = 'ksvt azaw xqzi thjl';
                 $mail->SMTPSecure = 'ssl';  // encryption TLS/SSL 
                 $mail->Port = 465;  // Port kết nối: khai báo 465 hoặc 587                
 
 
                 // Recipients - Người nhận
-                $tennguoigui = 'Nguyễn Đăng Thành'; // Tên người gửi lấy từ form nhập
+                $tennguoigui = 'Coffee Shop'; // Tên người gửi lấy từ form nhập
                 $mail->Username = $nguoigui; // SMTP username
                 $mail->Password = $matkhau;   // SMTP password
                 $mail->setFrom($nguoigui, $tennguoigui); //mail và tên người nhận 
                 $to = $email; // Email cần gửi đến lấy từ form nhập
-                $to_name = "Nguyễn Đăng Thành"; // Tên người cần gửi đến
+                $to_name = "Coffee Shop"; // Tên người cần gửi đến
 
                 // Content 
                 $mail->addAddress($to, $to_name); //mail và tên người nhận  

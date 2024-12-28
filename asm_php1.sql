@@ -65,7 +65,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `fullname`, `phone_number`, `email`, `address`, `note`, `order_date`) VALUES
-(143, 'Nguyễn Đăng Thành', '0387578520', 'bossryo68a@gmail.com', '68.65.120.213, viet nam', '', '2021-11-07 08:37:06'),
+(143, 'Huyenlinh', '0387578520', 'bossryo68a@gmail.com', '68.65.120.213, viet nam', '', '2021-11-07 08:37:06'),
 (144, 'DEMO', '03875723232', 'DEMO@gmail.com', 'DEMO', 'DEMO', '2021-11-07 08:42:16');
 
 -- --------------------------------------------------------
@@ -277,10 +277,44 @@ VALUES
 (2, 'M', 35000),
 (2, 'L', 40000),
 (4, 'No Size', 25000),
-(5, 'No Size', 3500),
+(5, 'No Size', 35000),
 (8, 'S', 40000),
 (8, 'M', 45000),
-(8, 'L', 50000);
+(8, 'L', 50000),
+(9, 'S', 32000),
+(9, 'M', 37000),
+(9, 'L', 42000),
+(10, 'S', 29000),
+(10, 'M', 34000),
+(10, 'L', 39000),
+(12, 'S', 20000),
+(12, 'M', 24000),
+(12, 'L', 28000),
+(13, 'No Size', 19000),
+(14, 'No Size', 23000),
+(16, 'No Size', 25000),
+(17, 'No Size', 32000),
+(18, 'S', 24000),
+(18, 'M', 29000),
+(18, 'L', 34000),
+(19, 'S', 24000),
+(19, 'M', 29000),
+(19, 'L', 34000),
+(20, 'S', 24000),
+(20, 'M', 29000),
+(20, 'L', 34000),
+(21, 'S', 26000),
+(21, 'M', 29000),
+(21, 'L', 32000),
+(26, 'No Size', 30000),
+(28, 'No Size', 18000),
+(29, 'No Size', 18000),
+(30, 'S', 32000),
+(30, 'M', 37000),
+(30, 'L', 42000),
+(31, 'S', 32000),
+(31, 'M', 37000),
+(31, 'L', 42000);
 ALTER TABLE order_details ADD COLUMN size VARCHAR(50) NOT NULL;
 ALTER TABLE orders ADD COLUMN id_user INT;
 ALTER TABLE order_details
@@ -289,5 +323,9 @@ FOREIGN KEY (id_user) REFERENCES user(id_user)
 ON DELETE CASCADE;
 ALTER TABLE orders
 ADD COLUMN payment_method VARCHAR(50) NOT NULL;
+
+ALTER TABLE `orders`
+ADD COLUMN `shipping_fee` FLOAT NOT NULL DEFAULT 0 AFTER `note`;
+
 
 

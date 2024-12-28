@@ -112,48 +112,45 @@ require_once('../database/dbhelper.php');
         </div>
     </div>
     <?php
-    require_once('../database/config.php');
-    require_once('../database/dbhelper.php');
-    if (isset($_POST["submit"]) && $_POST["username"] != '' && $_POST["password"] != '') {
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-        // $password = md5($password);
-        $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password' ";
-        execute($sql);
-        $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
-        $user = mysqli_query($con, $sql);
-        if ($username == 'Admin' && $password == '1010') {
-            echo '<script language="javascript">
-                alert("Đăng nhập Admin thành công!"); 
-                window.location = "../admin/category/index.php";
-            </script>';
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-            session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-        } else if (mysqli_num_rows($user) > 0) {
-            echo '<script language="javascript">
-                alert("Đăng nhập thành công!"); 
-                window.location = "../index.php";
-            </script>';
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-            session_start();
-            setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
-            setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
-        } else {
-            echo '<script language="javascript">
-                alert("Tài khoản và mật khẩu không chính xác !");
-                window.location = "login.php";
-             </script>';
-        }
+require_once('../database/config.php');
+require_once('../database/dbhelper.php');
+if (isset($_POST["submit"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
+    $username = trim(strip_tags($_POST["username"]));
+    $password = trim(strip_tags($_POST["password"]));
+    // $password = md5($password); // Thay thế bằng cơ chế mã hóa mạnh hơn nếu cần.
 
+    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+    $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
+    $user = mysqli_query($con, $sql);
 
-        // setcookie("username", "", time() - 3600);
-        // setcookie("password", "", time() - 3600);
+    if ($username === 'Admin' && $password === '1010') {
+        // Đăng nhập admin
+        echo '<script>
+            alert("Đăng nhập Admin thành công!"); 
+            window.location = "http://localhost:8080/coffeeshop/admin/index.php";
+        </script>';
+        session_start();
+        setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+        setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
+    } else if (mysqli_num_rows($user) > 0) {
+        // Đăng nhập user bình thường
+        echo '<script>
+            alert("Đăng nhập thành công!"); 
+            window.location = "../index.php";
+        </script>';
+        session_start();
+        setcookie("username", $username, time() + 30 * 24 * 60 * 60, '/');
+        setcookie("password", $password, time() + 30 * 24 * 60 * 60, '/');
+    } else {
+        // Sai tài khoản hoặc mật khẩu
+        echo '<script>
+            alert("Tài khoản và mật khẩu không chính xác!"); 
+            window.location = "login.php";
+        </script>';
     }
-    ?>
+}
+?>
+
 </body>
 
 </html>

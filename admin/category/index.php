@@ -20,19 +20,19 @@ require_once('../database/dbhelper.php');
 <body>
     <ul class="nav nav-tabs">
     <li class="nav-item">
-            <a class="nav-link" href="/coffeshop/admin/index.php">Thống kê</a>
+            <a class="nav-link" href="/coffeeshop/admin/index.php">Thống kê</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="/coffeshop/admin/category/">Quản lý danh mục</a>
+            <a class="nav-link active" href="/coffeeshop/admin/category/">Quản lý danh mục</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/coffeshop/admin/product/">Quản lý sản phẩm</a>
+            <a class="nav-link" href="/coffeeshop/admin/product/">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/coffeshop/admin/dashboard.php">Quản lý giỏ hàng</a>
+            <a class="nav-link" href="/coffeeshop/admin/dashboard.php">Quản lý giỏ hàng</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link " href="/coffeshop/admin/user">Quản lý người dùng</a>
+            <a class="nav-link " href="/coffeeshop/admin/user">Quản lý người dùng</a>
         </li>
         <li class="nav-item ">
             <a class="nav-link " href="../logout.php">Đăng xuất</a>
@@ -44,7 +44,7 @@ require_once('../database/dbhelper.php');
                 <h2 class="text-center">Quản lý danh mục</h2>
             </div>
             <div class="panel-body"></div>
-            <a href="add.php">
+            <a href="/coffeeshop/admin/category/add.php">
                 <button class=" btn btn-success" style="margin-bottom:20px">Thêm Danh Mục</button>
             </a>
             <table class="table table-bordered table-hover">

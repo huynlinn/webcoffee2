@@ -1,6 +1,6 @@
 <?php
 require_once('../database/dbhelper.php');
-checkLogin();
+
 $id = $name = '';
 if (!empty($_POST['name'])) {
     $name = '';

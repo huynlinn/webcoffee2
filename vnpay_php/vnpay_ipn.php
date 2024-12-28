@@ -10,7 +10,7 @@
  * Trả kết quả ghi nhận lại cho VNPAY
  */
 
-require_once("./config.php");
+require_once("config.php");
 $inputData = array();
 $returnData = array();
 foreach ($_GET as $key => $value) {

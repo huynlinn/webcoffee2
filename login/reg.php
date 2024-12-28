@@ -140,7 +140,7 @@ require_once('../database/dbhelper.php');
       $email = $_POST['email'];
 
       // Kiểm tra mật khẩu có đủ yêu cầu không
-      $password_pattern = "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/";
+      $password_pattern = "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*.])[A-Za-z\d!@#$%^&*.]{8,20}$/";
       if (!preg_match($password_pattern, $pass)) {
           echo '<script language="javascript">
                   alert("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái, số và ký tự đặc biệt!");

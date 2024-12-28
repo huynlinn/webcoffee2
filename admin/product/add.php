@@ -1,8 +1,9 @@
 <?php
 require_once('../database/dbhelper.php');
-checkLogin();
+
 $id = $title = $size = $price = $number = $thumbnail = $content = $id_category = "";
 if (!empty($_POST['title'])) {
+    // Lấy dữ liệu từ form
     if (isset($_POST['title'])) {
         $title = $_POST['title'];
         $title = str_replace('"', '\\"', $title);
@@ -13,6 +14,10 @@ if (!empty($_POST['title'])) {
     }
     if (isset($_POST['price'])) {
         $price = $_POST['price'];
+        // Kiểm tra giá trị có hợp lệ hay không
+        if (!is_numeric($price)) {
+            die('Giá sản phẩm không hợp lệ');
+        }
         $price = str_replace('"', '\\"', $price);
     }
     if (isset($_POST['number'])) {
@@ -24,69 +29,36 @@ if (!empty($_POST['title'])) {
         $size = $_POST['size'];
         $size = str_replace('"', '\\"', $size);
     }
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        // Dữ liệu gửi lên server không bằng phương thức post
-        echo "Phải Post dữ liệu";
-        die;
-    }
 
-    // Kiểm tra có dữ liệu thumbnail trong $_FILES không
-    // Nếu không có thì dừng
+    // Kiểm tra upload file thumbnail
     if (!isset($_FILES["thumbnail"])) {
         echo "Dữ liệu không đúng cấu trúc";
         die;
     }
 
-    // Kiểm tra dữ liệu có bị lỗi không
     if (isset($_FILES["thumbnail"]) && $_FILES["thumbnail"]['name'] !== '' && $_FILES["thumbnail"]['error'] != 0) {
         echo "Dữ liệu upload bị lỗi";
         die;
     }
 
-    // Đã có dữ liệu upload, thực hiện xử lý file upload
-
-    //Thư mục bạn sẽ lưu file upload
-    $target_dir    = "uploads/";
-    //Vị trí file lưu tạm trong server (file sẽ lưu trong uploads, với tên giống tên ban đầu)
-    $target_file   = $target_dir . basename($_FILES["thumbnail"]["name"]);
-
-    $allowUpload   = true;
-
-    //Lấy phần mở rộng của file (jpg, png, ...)
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["thumbnail"]["name"]);
+    $allowUpload = true;
     $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+    $maxfilesize = 800000;
+    $allowtypes = array('jpg', 'png', 'jpeg', 'gif');
 
-    // Cỡ lớn nhất được upload (bytes)
-    $maxfilesize   = 800000;
-
-    ////Những loại file được phép upload
-    $allowtypes    = array('jpg', 'png', 'jpeg', 'gif');
-
-
-    if (isset($_POST["submit"])) {
-        //Kiểm tra xem có phải là ảnh bằng hàm getimagesize
-        $check = getimagesize($_FILES["thumbnail"]["tmp_name"]);
-        if ($check !== false) {
-            echo "Đây là file ảnh - " . $check["mime"] . ".";
-            $allowUpload = true;
-        } else {
-            echo "Không phải file ảnh.";
-            $allowUpload = false;
-        }
-    }
-    // Kiểm tra kích thước file upload cho vượt quá giới hạn cho phép
     if ($_FILES["thumbnail"]["size"] > $maxfilesize) {
         echo "Không được upload ảnh lớn hơn $maxfilesize (bytes).";
         $allowUpload = false;
     }
 
-    // Kiểm tra kiểu file
     if (!in_array($imageFileType, $allowtypes)) {
         echo "Chỉ được upload các định dạng JPG, PNG, JPEG, GIF";
         $allowUpload = false;
     }
 
     if ($allowUpload) {
-        // Xử lý di chuyển file tạm ra thư mục cần lưu trữ, dùng hàm move_uploaded_file
         if (move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $target_file)) {
         } else {
             echo "Có lỗi xảy ra khi upload file.";
@@ -99,95 +71,111 @@ if (!empty($_POST['title'])) {
         $content = $_POST['content'];
         $content = str_replace('"', '\\"', $content);
     }
+
     if (isset($_POST['id_category'])) {
         $id_category = $_POST['id_category'];
         $id_category = str_replace('"', '\\"', $id_category);
     }
+
     if (!empty($title)) {
         $created_at = $updated_at = date('Y-m-d H:s:i');
         // Lưu vào DB
+        
         if ($id == '') {
-            // Thêm danh mục
-            $sql = 'insert into product(title, price, number, thumbnail, content, id_category, size, created_at, updated_at) 
-            values ("' . $title . '","' . $price . '","' . $number . '","' . $target_file . '","' . $content . '","' . $id_category . '","' . '","'.$size .'","'.$created_at . '","' . $updated_at . '")';
-        } else {
-            // Sửa danh mục
-            $sql = 'update product set title="' . $title . '",price="' . $price . '",number="' . $number . '",thumbnail="' . $target_file . '",content="' . $content . '",id_category="' . $id_category . '",size="'.$size.'", updated_at="' . $updated_at . '" where id=' . $id;
+            // Thêm sản phẩm vào bảng `product`
+            $sql = 'INSERT INTO product (title, number, thumbnail, content, id_category, created_at, updated_at) 
+                    VALUES ("' . $title . '", "' . $number . '", "' . $target_file . '", "' . $content . '", "' . $id_category . '", "' . $created_at . '", "' . $updated_at . '")';
+            execute($sql);
+        
+            // Lấy product_id vừa thêm
+            $product_id = executeSingleResult("SELECT LAST_INSERT_ID() as id")['id'];
+        
+            // Thêm thông tin size và giá vào bảng `product_size`
+            $sql_size_price = 'INSERT INTO product_size (product_id, size, price) 
+                               VALUES ("' . $product_id . '", "' . $size . '", "' . $price . '")';
+            execute($sql_size_price);
         }
-        execute($sql);
-        header('Location: index.php');
-        die();
-    }
+        if ($id != '') {
+            // Sửa thông tin sản phẩm trong bảng `product`
+            $sql = 'UPDATE product SET title=?, number=?, thumbnail=?, content=?, id_category=?, updated_at=? WHERE id=?';
+            execute($sql, [$title, $number, $target_file, $content, $id_category, $updated_at, $id]);
+        
+            // Kiểm tra và sửa thông tin size và price
+            $sql_check_size = 'SELECT * FROM product_size WHERE product_id=? AND size=?';
+            $size_data = executeSingleResult($sql_check_size, [$id, $size]);
+        
+            if ($size_data) {
+                // Nếu đã tồn tại size này, chỉ cần cập nhật giá
+                $sql_update_price = 'UPDATE product_size SET price=? WHERE product_id=? AND size=?';
+                execute($sql_update_price, [$price, $id, $size]);
+            } else {
+                // Nếu chưa tồn tại, thêm mới
+                $sql_insert_size = 'INSERT INTO product_size (product_id, size, price) VALUES (?, ?, ?)';
+                execute($sql_insert_size, [$id, $size, $price]);
+            }
+        
+            // Chuyển hướng sau khi hoàn tất
+            header('Location: index.php');
+            exit();
+        }
+    }        
 }
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = 'select * from product where id=' . $id;
+    $sql = 'SELECT * FROM product WHERE id=' . $id;
     $product = executeSingleResult($sql);
+
     if ($product != null) {
         $title = $product['title'];
-        $price = $product['price'];
         $number = $product['number'];
         $thumbnail = $product['thumbnail'];
         $content = $product['content'];
         $id_category = $product['id_category'];
-        $size = $product['size'];
         $created_at = $product['created_at'];
         $updated_at = $product['updated_at'];
     }
+
+    // Lấy thông tin size và price
+    $sql_size_price = 'SELECT * FROM product_size WHERE product_id=' . $id . ' LIMIT 1';
+    $size_price = executeSingleResult($sql_size_price);
+
+    if ($size_price != null) {
+        $size = $size_price['size'];
+        $price = $size_price['price'];
+    }
 }
+
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Thêm Sản Phẩm</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <!-- summernote -->
-    <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
-
 <body>
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="../index.php">Thống kê</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="index.php">Quản lý danh mục</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="../product/">Quản lý sản phẩm</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link " href="user/">Quản lý người dùng</a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link " href="../logout.php">Đăng xuất</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="../index.php">Thống kê</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.php">Quản lý danh mục</a></li>
+        <li class="nav-item"><a class="nav-link" href="../product/">Quản lý sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="../dashboard.php">Quản lý giỏ hàng</a></li>
+        <li class="nav-item"><a class="nav-link" href="user/">Quản lý người dùng</a></li>
+        <li class="nav-item"><a class="nav-link" href="../logout.php">Đăng xuất</a></li>
     </ul>
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2 class="text-center">Thêm/Sửa Sản Phẩm</h2>
-            </div>
+            <div class="panel-heading"><h2 class="text-center">Thêm/Sửa Sản Phẩm</h2></div>
             <div class="panel-body">
                 <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name">Tên Sản Phẩm:</label>
-                        <input type="text" id="id" name="id" value="<?= $id ?>" hidden="true">
+                        <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($id) ?>">
+
                         <input required="true" type="text" class="form-control" id="title" name="title" value="<?= $title ?>">
                     </div>
                     <div class="form-group">
@@ -198,11 +186,7 @@ if (isset($_GET['id'])) {
                             $sql = 'select * from category';
                             $categoryList = executeResult($sql);
                             foreach ($categoryList as $item) {
-                                if ($item['id'] == $id_category) {
-                                    echo '<option selected value="' . $item['id'] . '">' . $item['name'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $item['id'] . '">' . $item['name'] . '</option>';
-                                }
+                                echo '<option value="' . $item['id'] . '" ' . ($item['id'] == $id_category ? 'selected' : '') . '>' . $item['name'] . '</option>';
                             }
                             ?>
                         </select>
@@ -212,46 +196,31 @@ if (isset($_GET['id'])) {
                         <input required="true" type="text" class="form-control" id="price" name="price" value="<?= $price ?>">
                     </div>
                     <div class="form-group">
-                        <label for="name">Số Lượng Sản Phẩm:</label>
-                        <input required="true" type="number" class="form-control" id="number" name="number" value="<?= $number ?>">
-                    </div>
-                    <div class="form-group">
                         <label for="size">Size Sản Phẩm:</label>
-                        <input required="true" type="text" class="form-control" id="size" name="size" value="<?= $size ?>">
+                        <select class="form-control" id="size" name="size">
+                            <option value="S" <?= $size == 'S' ? 'selected' : '' ?>>S</option>
+                            <option value="M" <?= $size == 'M' ? 'selected' : '' ?>>M</option>
+                            <option value="L" <?= $size == 'L' ? 'selected' : '' ?>>L</option>
+                            <option value="No Size" <?= $size == 'No Size' ? 'selected' : '' ?>>No Size</option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="name">Số Lượng:</label>
+                        <input required="true" type="text" class="form-control" id="number" name="number" value="<?= $number ?>">
+                    </div> -->
+                    <div class="form-group">
+                        <label for="name">Hình Ảnh:</label>
+                        <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+                        <img src="<?= $thumbnail ?>" style="max-width: 200px;" />
                     </div>
                     <div class="form-group">
-                        <!-- <label for="exampleFormControlFile1">Thumbnail:<label> -->
-                        <label for="name">Thumbnail:</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1" id="thumbnail" name="thumbnail">
-                        <img src="<?= $thumbnail ?>" style="max-width: 200px" id="img_thumbnail">
+                        <label for="content">Nội Dung Sản Phẩm:</label>
+                        <textarea class="form-control" id="content" name="content" rows="5"><?= $content ?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Nội dung</label>
-                        <textarea class="form-control" id="content" rows="3" name="content"><?= $content ?></textarea>
-                    </div>
-                    <button class="btn btn-success">Lưu</button>
-                    <?php
-                    $previous = "javascript:history.go(-1)";
-                    if (isset($_SERVER['HTTP_REFERER'])) {
-                        $previous = $_SERVER['HTTP_REFERER'];
-                    }
-                    ?>
-                    <a href="<?= $previous ?>" class="btn btn-warning">Back</a>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
                 </form>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        function updateThumbnail() {
-            $('#img_thumbnail').attr('src', $('#thumbnail').val())
-        }
-        $(function() {
-            //doi website load noi dung => xu ly phan js
-            $('#content').summernote({
-                height: 200
-            });
-        })
-    </script>
 </body>
-
 </html>

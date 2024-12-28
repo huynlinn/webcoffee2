@@ -109,11 +109,14 @@ if (count($idList) > 0) {
 
 <?php if ($count > 0): ?>
     <h3>Tổng cộng: <?php echo number_format($total, 0, ',', '.') ?> VNĐ</h3>
+    <!-- Nút thanh toán chỉ hiển thị khi giỏ hàng có sản phẩm -->
+    <a href="checkout.php" onclick="checkLogin()"><button class="btn btn-success">Thanh toán</button></a>
 <?php else: ?>
     <h3>Giỏ hàng trống!</h3>
+    <!-- Nút thanh toán bị vô hiệu hóa khi giỏ hàng trống -->
+    <button class="btn btn-success" disabled>Thanh toán</button>
 <?php endif; ?>
-                        <!-- <p>Tổng đơn hàng: <span class="red bold"><?= number_format($total, 0, ',', '.') ?><span> VNĐ</span></span></p> -->
-                        <a href="checkout.php" onclick="checkLogin()"><button class="btn btn-success">Thanh toán</button></a>
+
                     </div>
                 </div>
             </section>

@@ -6,125 +6,168 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 100px auto 50px; /* Đẩy form xuống xa hơn header */
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top:10%;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-header h2 {
+            color: brown;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .contact-header p {
+            color: #777;
+            font-size: 16px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        .btn-submit {
+            margin-top:20px;
+            background-color: burlywood; /* Thay đổi màu nút */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #d2b48c; /* Màu sáng hơn khi hover */
+            cursor: pointer;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .contact-info h4 {
+            color: #555;
+            font-size: 18px;
+        }
+
+        .contact-info p {
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
 </head>
-<style>
-
-    form {
-        margin-top:10%;
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .form-group {
-        padding: 10px;
-        width: 650px;
-    }
-
-    .form-group input {
-        padding: 5px 0;
-        width: 100%;
-    }
-
-    textarea {
-        width: 100%;
-    }
-
-    button {
-        padding: 10px 50px;
-        border-radius: 5px;
-        color: white;
-        background-color: red;
-        border: none;
-        outline: 0;
-    }
-
-    button:hover {
-        opacity: 0.7;
-        cursor: pointer;
-    }
-
-    center {
-        font-size: 20px;
-        font-weight: bold;
-        color: green;
-        padding: 20px;
-    }
-</style>
 
 <body>
-    <h2 style="text-align: center;">Hãy liên hệ với chúng tôi nếu các bạn gặp các vấn đề trên Website</h2>
-    <form method="POST" action="">
-        <div class="form-group">
-            <label>Tên của bạn:</label>
-            <input type="text" name="name" required="required" />
+    <div class="contact-container">
+        <div class="contact-header">
+            <h2>Liên hệ với chúng tôi</h2>
+            <p>Gửi yêu cầu của bạn, chúng tôi sẽ phản hồi sớm nhất có thể!</p>
         </div>
-        <div class="form-group">
-            <label>Gửi đến gmail:</label>
-            <input type="email" name="email" required="required" />
+        <form method="POST" action="">
+            <div class="form-group">
+                <label for="name">Tên của bạn:</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Nhập tên của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email của bạn:</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Nhập email của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Tiêu đề yêu cầu:</label>
+                <input type="text" name="subject" class="form-control" id="subject" placeholder="Nhập tiêu đề" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Nội dung mail:</label>
+                <textarea name="message" class="form-control" id="message" rows="5" placeholder="Nhập nội dung" required></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" name="send" class="btn-submit">Gửi yêu cầu</button>
+            </div>
+        </form>
+        <div class="contact-info">
+            <h4>Thông tin liên hệ</h4>
+            <p>Email: support@coffeeshop.com</p>
+            <p>Điện thoại: 0123-456-789</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
         </div>
-        <div class="form-group">
-            <label>Tên Email</label>
-            <input type="text" name="subject" required="required" />
-        </div>
-        <div class="form-group">
-            <label>Nội dung email</label>
-            <textarea name="message" id="" cols="30" rows="10"></textarea>
-        </div>
-        <button name="send"> Send</button>
-    </form>
+    </div>
 
     <?php
-    //nhúng thư viện vào để dùng
     require "libs/PHPMailer-master/src/PHPMailer.php";
-require "libs/PHPMailer-master/src/SMTP.php";
-require "libs/PHPMailer-master/src/Exception.php";
+    require "libs/PHPMailer-master/src/SMTP.php";
+    require "libs/PHPMailer-master/src/Exception.php";
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        $name = $_POST['name']; // lấy ra tên của bạn
-        $email = $_POST['email']; // Email cần gửi đến
-        $subject = $_POST['subject']; // Tiêu đề email
-        $message = $_POST['message']; // Nội dung email
-        $mail = new PHPMailer\PHPMailer\PHPMailer(true);  //true: cho phép các trường hợp ngoại lệ
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $subject = $_POST['subject'];
+        $message = $_POST['message'];
 
-        // TRY có thể nó sẽ xảy ra ngoại lệ
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
         try {
-            //Server settings
-            $mail->isSMTP(); // gửi mail SMTP
-            $mail->CharSet  = "utf-8";
-            $mail->Host = 'smtp.gmail.com';  // khai báo SMTP servers
-            $mail->SMTPAuth = true; // Enable authentication
-            $nguoigui = 'kqtran123@gmail.com'; // Tài khoản Email
-            $matkhau = 'ksvt azaw xqzi thjl'; // Mật khẩu Email
-            $mail->SMTPSecure = 'ssl';  // encryption TLS/SSL 
-            $mail->Port = 465;  // Port kết nối: khai báo 465 hoặc 587                
+            $mail->isSMTP();
+            $mail->CharSet = "utf-8";
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $nguoigui = 'kqtran123@gmail.com';
+            $matkhau = 'ksvt azaw xqzi thjl';
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
 
+            $mail->Username = $nguoigui;
+            $mail->Password = $matkhau;
+            $mail->setFrom($nguoigui, "Coffee Shop");
+            $mail->addAddress('ldinh2025@gmail.com', "Coffee Shop Admin");
+            $mail->addReplyTo($email, $name);
 
-            // Recipients - Người nhận
-            $tennguoigui = $name; // Tên người gửi lấy từ form nhập
-            $mail->Username = $nguoigui; // SMTP username
-            $mail->Password = $matkhau;   // SMTP password
-            $mail->setFrom($nguoigui, $tennguoigui); //mail và tên người nhận 
-            $to = $email; // Email cần gửi đến lấy từ form nhập
-            $to_name = "coffeeshop"; // Tên người cần gửi đến
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = "Bạn có một yêu cầu mới từ khách hàng: <br><br>" .
+                "Tên khách hàng: $name<br>" .
+                "Email khách hàng: $email<br>" .
+                "Tiêu đề yêu cầu: $subject<br>" .
+                "Nội dung: <br>" . nl2br($message);
 
-            // Content 
-            $mail->addAddress($to, $to_name); //mail và tên người nhận  
-            $mail->isHTML(true);  // Khai báo nội dung email hiển thị định dạng html
-            $mail->Subject = $subject; // Tiêu đề email
-            $mail->Body = $message; // Nội dung email
-
-            $mail->send(); // Tiến hành gửi thư
-            echo '<center>Đã gửi mail xong</center>';
-        }
-        // nếu ở trên lỗi thì CATCH sẽ chạy
-        catch (Exception $e) {
-            echo 'Mail không gửi được. Lỗi: ', $mail->ErrorInfo;
+            $mail->send();
+            echo '<center style="color: green; font-weight: bold;">Yêu cầu của bạn đã được gửi đi thành công!</center>';
+        } catch (Exception $e) {
+            echo '<center style="color: red;">Mail không gửi được. Lỗi: ' . $mail->ErrorInfo . '</center>';
         }
     }
     ?>
-    
 </body>
 <?php require_once('layout/footer.php'); ?>
 

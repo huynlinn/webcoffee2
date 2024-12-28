@@ -4,58 +4,81 @@
         font-family: "Encode Sans SC", sans-serif;
     }
 
-    .row img {
-        max-width: 100%;
+    h3 {
+        color: #8B4513; /* Màu tiêu đề */
+        font-size: 24px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    
+
+    p {
+        
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        font-weight: 100;
+    }
+
+    /* Thiết kế cho các liên kết và đoạn văn */
+    a {
+        color: #8B4513; /* Màu liên kết */
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
     }
 </style>
 <main>
     <div class="container">
         <div id="ant-layout">
-            <section class="search-quan">
-                <i class="fas fa-search"></i>
-                <form action="thucdon.php" method="GET">
-                    <input name="search" type="text" placeholder="Tìm món hoặc thức ăn">
-                </form>
-            </section>
             <section class="main">
+                <!-- Giới thiệu chung -->
                 <div class="row">
-                    <h3>Grap Food là gì?</h3>
-                    <p>Tại Grab, chúng tôi hiểu rằng một bữa ăn ngon có thể mang lại cho bạn sức khoẻ và tinh thần thoải mái nhất. Vì vậy, Grab cho ra mắt dịch vụ GrabFood, nhằm kết nối các nhà hàng, quán ăn tại địa phương với tất cả mọi người. Bạn chỉ cần đặt món ăn yêu thích trên GrabFood, đội ngũ giao hàng của chúng tôi sẽ nhanh chóng mang đến cho bạn bữa ăn nóng hổi và ngon lành.</p>
+                    <h3>Về Coffee Shop</h3>
+                    <p>Chào mừng bạn đến với website chính thức của Coffee Shop! Đây là nơi chúng tôi mang đến cho bạn trải nghiệm thưởng thức cà phê và đồ uống tuyệt hảo cùng với không gian thư giãn đậm chất riêng. Hãy khám phá thực đơn đa dạng và dịch vụ tiện ích mà chúng tôi cung cấp!</p>
                 </div>
+                
+                <!-- Tầm nhìn và sứ mệnh -->
                 <div class="row">
-                    <h3>GrapFood hoạt động như thế nào?</h3>
-                    <p>GrabFood hoạt động từ 7h đến 22h hằng ngày, tuỳ theo khu vực của bạn và thời gian mở cửa cụ thể của từng nhà hàng, quán ăn.</p>
+                    <h3>Tầm nhìn và Sứ mệnh</h3>
+                    <p>Chúng tôi không chỉ phục vụ đồ uống mà còn lan tỏa giá trị của sự gắn kết, niềm vui và cảm giác thân thuộc. Coffee Shop hướng tới trở thành điểm đến lý tưởng để bạn tận hưởng những khoảnh khắc đáng nhớ bên bạn bè và gia đình.</p>
                 </div>
+                
+                <!-- Dịch vụ nổi bật -->
                 <div class="row">
-                    <img src="images/bg/GrabFood.jpg" alt="">
-
-                    <h3>Những nhà hàng, quán ăn nào trong khu vực của tôi giao hàng qua GrabFood?</h3>
-                    <p>Để xem danh sách các nhà hàng, quán ăn có giao hàng qua GrabFood bạn chỉ cần nhập địa chỉ của mình trên ứng dụng. Để đảm bảo đồ ăn nóng hổi, tươi ngon và được giao đến bạn nhanh chóng, GrabFood sẽ quét vị trí của bạn và gợi ý danh sách nhà hàng, quán ăn ở gần vị trí bạn nhất.</p>
+                    <h3>Dịch vụ của chúng tôi</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Thực đơn đồ uống phong phú, từ cà phê nguyên chất đến các loại trà, sinh tố và bánh ngọt.</li>
+                        <li>Dịch vụ đặt hàng trực tuyến, giao hàng tận nơi nhanh chóng.</li>
+                        <li>Không gian quán phù hợp để làm việc, gặp gỡ bạn bè hoặc tổ chức sự kiện nhỏ.</li>
+                    </ul>
                 </div>
+                
+                <!-- Hình ảnh minh họa -->
                 <div class="row">
-                    <h3>Tôi có thể thanh toán bằng tiền mặt không?</h3>
-                    <p>Có nhé!</p>
+                    <img src="images/bg/coffee_shop.jpg" alt="Không gian quán Coffee Shop" style="max-width: 100%; border-radius: 8px; margin-top: 15px;">
                 </div>
-                <div class="row">
-                    <h3>Tôi có thể thanh toán bằng GrabPay không?</h3>
-                    <p>Hiện tại bạn chưa thể thanh toán GrabFood bằng GrabPay. Chúng tôi đang cố gắng để áp dụng phương thức thanh toán này cho dịch vụ GrabFood trong thời gian sớm nhất</p>
-                </div>
-                <div class="row">
-                    <h3>Chi phí được tính như thế nào?</h3>
-                    <p>Chi phí hiển thị trên ứng dụng bao gồm chi phí của phần ăn theo đơn giá của nhà hàng và phí vận chuyển.</p>
-                </div>
-                <div class="row">
-                    <h3>Tôi có thể đặt giao nhận những món ăn nào qua GrabFood?</h3>
-                    <p>Danh sách đa dạng các món ăn của chúng tôi bao gồm: món Việt, Tây, Á, món theo phong cách Fusion,… có thể phục vụ cho mọi nhu cầu ăn uống của bạn.</p>
-                </div>
-                <div class="row">
-                    <h3>Tôi có thể tìm thấy những nhà hàng, quán ăn nào trong khu vực của mình?</h3>
-                    <p>Danh sách nhà hàng, quán ăn được sắp xếp dựa theo khoảng cách và thời gian giao hàng dự kiến từ Địa chỉ giao thức ăn đến vị trí của bạn.</p>
-                </div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.280539447332!2d107.29400661486774!3d16.762712588455788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x80f122cab2275a42!2zTmd1eeG7hW4gxJDEg25nIFRow6BuaA!5e0!3m2!1svi!2s!4v1629007864673!5m2!1svi!2s" width="550" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/jJoFCFcJHsI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                
+                <!-- Vị trí quán -->
+                <section class="map-section">
+                    <h3>Địa chỉ của chúng tôi</h3>
+                    <p>Hãy ghé thăm quán của chúng tôi tại địa chỉ dưới đây hoặc đặt hàng trực tuyến để thưởng thức đồ uống yêu thích ngay tại nhà!</p>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.280539447332!2d107.29400661486774!3d16.762712588455788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x80f122cab2275a42!2zTmd1eeG7hW4gxJDEg25nIFRow6BuaA!5e0!3m2!1svi!2s!4v1629007864673!5m2!1svi!2s" 
+                            width="100%" height="450" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"></iframe>
+                </section>
+                
+                <!-- Video giới thiệu -->
+                <section class="video-section">
+                    <h3>Video Giới Thiệu Coffee Shop</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/jJoFCFcJHsI" title="Video giới thiệu Coffee Shop" frameborder="0" 
+                            style="border-radius: 8px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </section>
             </section>
         </div>
     </div>
 </main>
+
 <?php require('layout/footer.php') ?>

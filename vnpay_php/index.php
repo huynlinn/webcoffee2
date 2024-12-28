@@ -9,10 +9,10 @@
         <meta name="author" content="">
         <title>Tạo mới đơn hàng</title>
         <!-- Bootstrap core CSS -->
-        <link href="/vnpay_php/assets/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/coffeeshop/vnpay_php/assets/bootstrap.min.css" rel="stylesheet"/>
         <!-- Custom styles for this template -->
-        <link href="/vnpay_php/assets/jumbotron-narrow.css" rel="stylesheet">  
-        <script src="/vnpay_php/assets/jquery-1.11.3.min.js"></script>
+        <link href="/coffeeshop/vnpay_php/assets/jumbotron-narrow.css" rel="stylesheet">  
+        <script src="/coffeeshop/vnpay_php/assets/jquery-1.11.3.min.js"></script>
     </head>
 
     <body>
@@ -39,13 +39,13 @@
         </div> 
         <script>
              function pay() {
-              window.location.href = "/vnpay_php/vnpay_pay.php";
+              window.location.href = "/coffeshop/vnpay_php/vnpay_pay.php";
             }
             function querydr() {
-              window.location.href = "/vnpay_php/vnpay_querydr.php";
+              window.location.href = "/coffeshop/vnpay_php/vnpay_querydr.php";
             }
              function refund() {
-              window.location.href = "/vnpay_php/vnpay_refund.php";
+              window.location.href = "/coffeshop/vnpay_php/vnpay_refund.php";
             }
         </script>
     </body>
