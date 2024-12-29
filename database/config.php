@@ -2,7 +2,7 @@
 define('HOST', 'localhost');
 define('USERNAME', 'root');
 define('PASSWORD', '');
-define('DATABASE', 'asm_php1');
+define('DATABASE', 'asm_php');
 // Cấu hình VNPay
 $vnp_TmnCode = "TLJF1MV9"; // Mã website của bạn tại VNPay
 $vnp_HashSecret = "4JWUX5MRN8HWL8DTDOMCXIXS5E8EABTB"; // Chuỗi bí mật dùng để tạo chữ ký

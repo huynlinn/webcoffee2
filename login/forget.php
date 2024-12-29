@@ -17,8 +17,8 @@ require_once('../database/dbhelper.php');
     <div id="wrapper">
         <header>
             <div class="container">
-                <section class="logo">
-                    <a href="../index.php"><img src="images/logo.svg" alt=""></a>
+            <section class="logo">
+                <a href="../index.php"><img src="../images/logo.svg" alt="" width="60%"></a>
                 </section>
                 <nav>
                     <ul>

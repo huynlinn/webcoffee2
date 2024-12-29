@@ -1,11 +1,12 @@
 <section class="recently">
+    <a href="#trasua"></a>
                 <div class="title">
-                    <h1>Trà sữa</h1>
+                    <h1>Trà trái cây</h1>
                 </div>
                 <div class="product-recently">
                     <div class="row">
                         <?php
-                        $sql = 'select * from product where id_category=4';
+                        $sql = 'select * from product where id_category=1';
                         // $sql = 'select * from category';
                         $productList = executeResult($sql);
                         // $categoryList = executeResult($sql);

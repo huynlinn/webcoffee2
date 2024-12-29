@@ -1,6 +1,42 @@
 <?php
 require_once('config.php');
 
+function executeBatch($queries)
+{
+    // Mở kết nối đến cơ sở dữ liệu
+    $con = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
+    mysqli_set_charset($con, "utf8");
+
+    // Bắt đầu giao dịch
+    mysqli_begin_transaction($con);
+
+    // Thực thi từng câu lệnh trong mảng
+    try {
+        foreach ($queries as $query) {
+            // Nếu câu lệnh có tham số, chuẩn bị và thực thi
+            if (isset($query['params']) && !empty($query['params'])) {
+                $stmt = mysqli_prepare($con, $query['sql']);
+                $types = str_repeat("s", count($query['params'])); // Giả sử tất cả tham số là kiểu string
+                mysqli_stmt_bind_param($stmt, $types, ...$query['params']);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+            } else {
+                // Nếu câu lệnh không có tham số, thực thi trực tiếp
+                mysqli_query($con, $query['sql']);
+            }
+        }
+        
+        // Commit giao dịch sau khi tất cả câu lệnh đã được thực thi thành công
+        mysqli_commit($con);
+    } catch (Exception $e) {
+        // Nếu có lỗi, rollback tất cả các thay đổi
+        mysqli_rollback($con);
+        echo "Error: " . $e->getMessage();
+    }
+
+    // Đóng kết nối
+    mysqli_close($con);
+}
 function execute($sql, $params = [])
 {
     // mở kết nối đến cơ sở dữ liệu
@@ -55,7 +91,6 @@ function addProductSize($product_id, $size, $price)
 }
 
 
-
 function executeResult($sql)
 {
 	//save data into table
@@ -96,17 +131,15 @@ function executeSingleResult($sql, $params = [])
     // Lấy kết quả
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
+    // đóng kết nối
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
     // Đảm bảo nếu không có kết quả thì trả về mảng rỗng
     if ($row) {
         return $row;
     } else {
         return [];
     }
-
-    // đóng kết nối
-    mysqli_stmt_close($stmt);
-    mysqli_close($con);
 }
 
 

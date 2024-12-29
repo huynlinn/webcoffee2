@@ -1,84 +1,176 @@
 <?php require('layout/header.php') ?>
-<style>
-    main {
-        font-family: "Encode Sans SC", sans-serif;
-    }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về Coffee Shop</title>
+    <!-- Thêm Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
 
-    h3 {
-        color: #8B4513; /* Màu tiêu đề */
-        font-size: 24px;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-
-    
-
-    p {
-        
-        font-size: 16px;
-        line-height: 1.6;
-        margin-bottom: 15px;
-        font-weight: 100;
-    }
-
-    /* Thiết kế cho các liên kết và đoạn văn */
-    a {
-        color: #8B4513; /* Màu liên kết */
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>
-<main>
-    <div class="container">
-        <div id="ant-layout">
-            <section class="main">
-                <!-- Giới thiệu chung -->
-                <div class="row">
-                    <h3>Về Coffee Shop</h3>
-                    <p>Chào mừng bạn đến với website chính thức của Coffee Shop! Đây là nơi chúng tôi mang đến cho bạn trải nghiệm thưởng thức cà phê và đồ uống tuyệt hảo cùng với không gian thư giãn đậm chất riêng. Hãy khám phá thực đơn đa dạng và dịch vụ tiện ích mà chúng tôi cung cấp!</p>
-                </div>
-                
-                <!-- Tầm nhìn và sứ mệnh -->
-                <div class="row">
-                    <h3>Tầm nhìn và Sứ mệnh</h3>
-                    <p>Chúng tôi không chỉ phục vụ đồ uống mà còn lan tỏa giá trị của sự gắn kết, niềm vui và cảm giác thân thuộc. Coffee Shop hướng tới trở thành điểm đến lý tưởng để bạn tận hưởng những khoảnh khắc đáng nhớ bên bạn bè và gia đình.</p>
-                </div>
-                
-                <!-- Dịch vụ nổi bật -->
-                <div class="row">
-                    <h3>Dịch vụ của chúng tôi</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Thực đơn đồ uống phong phú, từ cà phê nguyên chất đến các loại trà, sinh tố và bánh ngọt.</li>
-                        <li>Dịch vụ đặt hàng trực tuyến, giao hàng tận nơi nhanh chóng.</li>
-                        <li>Không gian quán phù hợp để làm việc, gặp gỡ bạn bè hoặc tổ chức sự kiện nhỏ.</li>
-                    </ul>
-                </div>
-                
-                <!-- Hình ảnh minh họa -->
-                <div class="row">
-                    <img src="images/bg/coffee_shop.jpg" alt="Không gian quán Coffee Shop" style="max-width: 100%; border-radius: 8px; margin-top: 15px;">
-                </div>
-                
-                <!-- Vị trí quán -->
-                <section class="map-section">
-                    <h3>Địa chỉ của chúng tôi</h3>
-                    <p>Hãy ghé thăm quán của chúng tôi tại địa chỉ dưới đây hoặc đặt hàng trực tuyến để thưởng thức đồ uống yêu thích ngay tại nhà!</p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.280539447332!2d107.29400661486774!3d16.762712588455788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x80f122cab2275a42!2zTmd1eeG7hW4gxJDEg25nIFRow6BuaA!5e0!3m2!1svi!2s!4v1629007864673!5m2!1svi!2s" 
-                            width="100%" height="450" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"></iframe>
-                </section>
-                
-                <!-- Video giới thiệu -->
-                <section class="video-section">
-                    <h3>Video Giới Thiệu Coffee Shop</h3>
-                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/jJoFCFcJHsI" title="Video giới thiệu Coffee Shop" frameborder="0" 
-                            style="border-radius: 8px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </section>
-            </section>
+<body>
+    <!-- Section About Us -->
+    <section class="about-us">
+        <div class="overlay">
+            <h3>Về Coffee Shop</h3>
+            <h6>Chào mừng bạn đến với website chính thức của Coffee Shop! Đây là nơi chúng tôi mang đến cho bạn trải nghiệm thưởng thức cà phê và đồ uống tuyệt hảo cùng với không gian thư giãn đậm chất riêng. Hãy khám phá thực đơn đa dạng và dịch vụ tiện ích mà chúng tôi cung cấp!</h6>
         </div>
+    </section>
+
+    <div class="service">
+        <h4>SINCE 2023</h4>
     </div>
-</main>
+
+    <!-- New Section with Image and Description -->
+    <section class="about-details">
+        <div class="container">
+            <!-- Left Side: Description about Coffee Shop -->
+            <div class="description">
+                <h5>Thực đơn và Dịch vụ</h5>
+                <p>Thực đơn đồ uống phong phú, từ cà phê nguyên chất đến các loại trà, sinh tố và bánh ngọt.</p>
+                <p>Dịch vụ đặt hàng trực tuyến, giao hàng tận nơi nhanh chóng.</p>
+                <p>Không gian quán phù hợp để làm việc, gặp gỡ bạn bè hoặc tổ chức sự kiện nhỏ.</p>
+            </div>
+            <div class="image-center">
+            <img src="https://demo.htmlcodex.com/1528/coffee-shop-html-template/img/about.png" alt="About Coffee Shop Image">
+        </div>
+            <!-- Right Side: Vision and Mission -->
+            <div class="vision">
+                <h5>Tầm nhìn và Sứ mệnh</h5>
+                <p>Chúng tôi không chỉ phục vụ đồ uống mà còn lan tỏa giá trị của sự gắn kết, niềm vui và cảm giác thân thuộc. Coffee Shop hướng tới trở thành điểm đến lý tưởng để bạn tận hưởng những khoảnh khắc đáng nhớ bên bạn bè và gia đình.</p>
+            </div>
+        </div>
+
+        <!-- Image at the center -->
+        
+    </section>
+</body>
+</html>
 
 <?php require('layout/footer.php') ?>
+<style>
+ /* Định dạng chung cho các phần tử */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Định dạng cho phần About Us */
+.about-us {
+    position: relative;
+    width: 100%;
+    height: 100vh;  /* Full màn hình */
+    background-image: url('https://hoanghamobile.com/tin-tuc/wp-content/webp-express/webp-images/uploads/2024/08/anh-cafe.jpg.webp');
+    background-size: cover;
+    background-position: center;
+    margin-top: 8%;
+}
+
+.about-us .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);  /* Màu đen mờ */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.about-us h3 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: 'Pacifico', cursive;
+}
+
+.about-us h6 {
+    font-size: 18px;
+    max-width: 800px;
+    line-height: 1.6;
+    color: burlywood;
+}
+
+.service h4 {
+    font-weight: bold;
+    font-size: 40px;
+    color: brown;
+    margin-top: 15%;
+    text-align: center;
+}
+
+/* Section về chi tiết Coffee Shop */
+.about-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 0;
+    padding: 0 20px;
+}
+
+/* Mô tả về quán (bên trái) */
+.description {
+    width: 30%;
+}
+
+.description h5 {
+    font-size: 37px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: brown;
+}
+
+.description p {
+    font-size: 16px;
+    color: black;
+    font-weight: 200;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Tầm nhìn và sứ mệnh (bên phải) */
+.vision {
+    width: 30%;
+}
+.container{
+    display: flex;
+    margin-top:10px;
+}
+.vision h5 {
+    font-size: 37px;
+    font-weight: bold;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: brown;
+}
+
+.vision p {
+    font-size: 16px;
+    color: black;
+    font-weight: 200;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Hình ảnh nằm giữa 2 phần */
+.image-center {
+    text-align: center;
+    width: 30%;
+}
+
+.image-center img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+</style>

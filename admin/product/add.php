@@ -14,7 +14,6 @@ if (!empty($_POST['title'])) {
     }
     if (isset($_POST['price'])) {
         $price = $_POST['price'];
-        // Kiểm tra giá trị có hợp lệ hay không
         if (!is_numeric($price)) {
             die('Giá sản phẩm không hợp lệ');
         }
@@ -80,20 +79,22 @@ if (!empty($_POST['title'])) {
     if (!empty($title)) {
         $created_at = $updated_at = date('Y-m-d H:s:i');
         // Lưu vào DB
-        
         if ($id == '') {
-            // Thêm sản phẩm vào bảng `product`
-            $sql = 'INSERT INTO product (title, number, thumbnail, content, id_category, created_at, updated_at) 
-                    VALUES ("' . $title . '", "' . $number . '", "' . $target_file . '", "' . $content . '", "' . $id_category . '", "' . $created_at . '", "' . $updated_at . '")';
-            execute($sql);
-        
-            // Lấy product_id vừa thêm
-            $product_id = executeSingleResult("SELECT LAST_INSERT_ID() as id")['id'];
-        
-            // Thêm thông tin size và giá vào bảng `product_size`
-            $sql_size_price = 'INSERT INTO product_size (product_id, size, price) 
-                               VALUES ("' . $product_id . '", "' . $size . '", "' . $price . '")';
-            execute($sql_size_price);
+            $queries = [
+                [
+                    'sql' => "INSERT INTO product (title, number, thumbnail, content, id_category, created_at, updated_at) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    'params' => [$title, $number, $target_file, $content, $id_category, $created_at, $updated_at]
+                ],
+                [
+                    'sql' => "INSERT INTO product_size (product_id, size, price) 
+                              VALUES (LAST_INSERT_ID(), ?, ?)",
+                    'params' => [$size, $price]
+                ]
+            ];
+            executeBatch($queries);
+            header('Location: index.php');
+            exit();
         }
         if ($id != '') {
             // Sửa thông tin sản phẩm trong bảng `product`
@@ -147,6 +148,7 @@ if (isset($_GET['id'])) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>

@@ -43,7 +43,7 @@ require_once('database/dbhelper.php');
                     <a class="nav-link " href="/coffeeshop/admin/user">Quản lý người dùng</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link " href="logout.php">Đăng xuất</a>
+                    <a class="nav-link " href="/coffeeshop/index.php">Đăng xuất</a>
                 </li>
             </ul>
         </header>

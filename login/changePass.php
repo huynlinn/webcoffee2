@@ -17,7 +17,9 @@ require_once('../database/dbhelper.php');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="plugin/fontawesome/css/all.css">
+
+  <link rel="stylesheet" href="header.css">
     
     <title>Đăng nhập</title>
 </head>
@@ -25,8 +27,8 @@ require_once('../database/dbhelper.php');
     <div id="wrapper" ">
     <header>
             <div class="container">
-                <section class="logo">
-                    <a href="../index.php"><img src="images/logo.svg" alt=""></a>
+            <section class="logo">
+                <a href="../index.php"><img src="../images/logo.svg" alt="" width="60%"></a>
                 </section>
                 <nav ">
                     <ul>
@@ -108,7 +110,7 @@ require_once('../database/dbhelper.php');
                 </div>
                 <div class="form-group">
                     <input type="submit" name="submit" class="btn btn-primary" value="Đăng nhập">
-                    <p style="padding-top: 1rem;"><a href="reg.php">Quên mật khẩu?</a></p>
+                    <p style="padding-top: 1rem;"><a href="forget.php">Quên mật khẩu?</a></p>
                 </div>
             </form>
         </div>

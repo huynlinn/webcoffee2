@@ -60,7 +60,7 @@ function getConnection() {
     $host = 'localhost';
     $username = 'root';
     $password = '';
-    $dbname = 'asm_php1'; // Thay thế với tên cơ sở dữ liệu của bạn
+    $dbname = 'asm_php'; // Thay thế với tên cơ sở dữ liệu của bạn
 
     $conn = new mysqli($host, $username, $password, $dbname);
 

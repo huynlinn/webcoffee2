@@ -52,7 +52,6 @@ require_once('../database/dbhelper.php');
                 <td>Tên đăng nhập</td>
                 <td>Số điện thoại</td>
                 <td>Email</td>
-                <td>Vai trò</td>
                 <td width="50px"></td>
             </tr>
             </thead>

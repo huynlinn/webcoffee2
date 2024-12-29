@@ -13,7 +13,7 @@ require_once('database/dbhelper.php');
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/product.css">
     <link rel="stylesheet" href="plugin/fontawesome/css/all.css">
-    <title>Asm-Nguyễn Đăng Thành-PS18241</title>
+    
 </head>
 
 <body>

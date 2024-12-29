@@ -266,8 +266,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <label for="payment_method">Chọn hình thức thanh toán:</label><br>
     <input type="radio" id="cod" name="payment_method" value="COD" checked>
     <label for="cod">Thanh toán khi nhận hàng</label><br>
-    <input type="radio" id="vnpay" name="payment_method" value="VNPay">
-    <label for="vnpay">Thanh toán VNPay</label><br>
+    <!-- <input type="radio" id="vnpay" name="payment_method" value="VNPay">
+    <label for="vnpay">Thanh toán VNPay</label><br> -->
 </div>
 
 

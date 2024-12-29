@@ -1,19 +1,19 @@
 <?php
 require_once('../database/dbhelper.php');
 
-if (!empty($_POST)) {
-	if (isset($_POST['action'])) {
-		$action = $_POST['action'];
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
+    
+    // Xóa các dòng liên quan trong product_size
+    $sql = 'DELETE FROM product_size WHERE product_id = ?';
+    execute($sql, [$id]);
 
-		switch ($action) {
-			case 'delete':
-				if (isset($_POST['id'])) {
-					$id = $_POST['id'];
+    // Xóa sản phẩm trong bảng product
+    $sql = 'DELETE FROM product WHERE id = ?';
+    execute($sql, [$id]);
 
-					$sql = 'delete from product where id = '.$id;
-					execute($sql);
-				}
-				break;
-		}
-	}
-}?>
+    header('Location: index.php'); // Chuyển hướng sau khi xóa
+    exit();
+}
+
+?>

@@ -25,7 +25,7 @@ require_once('../database/dbhelper.php');
         <li class="nav-item"><a class="nav-link active" href="/coffeeshop/admin/product/">Quản lý sản phẩm</a></li>
         <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/dashboard.php">Quản lý giỏ hàng</a></li>
         <li class="nav-item"><a class="nav-link" href="/coffeeshop/admin/user">Quản lý người dùng</a></li>
-        <li class="nav-item"><a class="nav-link" href="../logout.php">Đăng xuất</a></li>
+        <li class="nav-item"><a class="nav-link" href="/coffeeshop/index.php">Đăng xuất</a></li>
     </ul>
 
     <div class="container">
@@ -37,62 +37,103 @@ require_once('../database/dbhelper.php');
                 <a href="add.php">
                     <button class="btn btn-success" style="margin-bottom: 20px;">Thêm Sản Phẩm</button>
                 </a>
+                <?php
+                    $limit = 5;
+                    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+                    $start = ($page - 1) * $limit;
+                    
+                    $sql = "
+                    SELECT 
+                        p.id, 
+                        p.title, 
+                        p.thumbnail, 
+                        p.content, 
+                        p.id_category, 
+                        ps.size, 
+                        ps.price,
+                        c.name AS category_name
+                    FROM 
+                        (SELECT * FROM product LIMIT $start, $limit) AS p_ids  -- Truy vấn con để phân trang sản phẩm
+                    JOIN product p ON p.id = p_ids.id  -- JOIN lại với bảng product
+                    LEFT JOIN product_size ps ON p.id = ps.product_id  -- JOIN với bảng product_size
+                    LEFT JOIN category c ON p.id_category = c.id  -- JOIN với bảng category
+                    ORDER BY p.id;
+
+                    ";
+                    
+                    $productList = executeResult($sql);
+                    
+                    // Xử lý kết quả để nhóm các size cùng một sản phẩm
+                    $groupedProducts = [];
+                    foreach ($productList as $item) {
+                        // Nếu sản phẩm chưa có trong mảng thì tạo mới
+                        if (!isset($groupedProducts[$item['id']])) {
+                            $groupedProducts[$item['id']] = [
+                                'id' => $item['id'],
+                                'title' => $item['title'],
+                                'thumbnail' => $item['thumbnail'],
+                                'content' => $item['content'],
+                                'id_category' => $item['id_category'],
+                                'category_name' => $item['category_name'],
+                                'sizes' => [] // Mảng chứa các size của sản phẩm
+                            ];
+                        }
+                    
+                        // Thêm size vào sản phẩm
+                        $groupedProducts[$item['id']]['sizes'][] = [
+                            'size' => $item['size'],
+                            'price' => $item['price']
+                        ];
+                    }
+                
+               
+                ?>
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr style="font-weight: 500;">
                             <td width="70px">STT</td>
                             <td>Thumbnail</td>
                             <td>Tên Sản Phẩm</td>
-                            <td>Giá</td>
+                            <td>Giá (Small)</td>
                             <td>Nội dung</td>
-                            <td>ID Danh Mục</td>
+                            <td>Danh Mục</td>
+                            <td>Size</td>
                             <td width="50px"></td>
                             <td width="50px"></td>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $limit = 5;
-                        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-                        $start = ($page - 1) * $limit;
-
-                        // SQL Query: Lấy giá thấp nhất của sản phẩm dựa trên bảng product_size
-                        $sql = "
-    SELECT 
-        product.id, 
-        product.title, 
-        product.thumbnail, 
-        product.content, 
-        product.id_category, 
-        MIN(product_size.price) AS price 
-    FROM product 
-    LEFT JOIN product_size ON product.id = product_size.product_id 
-    GROUP BY product.id 
-    LIMIT $start, $limit
-";
-
-                        $productList = executeResult($sql);
-                        
-
-                        if (!empty($productList)) {
+                        if (!empty($groupedProducts)) {
                             $index = $start + 1;
-                            foreach ($productList as $item) {
+                            
+                        
+                            foreach ($groupedProducts as $product) {
+                                $smallestPrice = min(array_column($product['sizes'], 'price'));
                                 echo '<tr>
-                                    <td>' . $index++ . '</td>
+                                   <td>' . htmlspecialchars($product['id']) . '</td>
                                     <td style="text-align: center;">
-                                        <img src="' . htmlspecialchars($item['thumbnail']) . '" alt="" style="width: 50px;">
+                                        <img src="' . htmlspecialchars($product['thumbnail']) . '" alt="" style="width: 50px;">
                                     </td>
-                                    <td>' . htmlspecialchars($item['title']) . '</td>
-                                    <td>' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
-                                    <td>' . htmlspecialchars($item['content']) . '</td>
-                                    <td>' . htmlspecialchars($item['id_category']) . '</td>
+                                    <td>' . htmlspecialchars($product['title']) . '</td>
+                                     <td>' . number_format($smallestPrice, 0, ',', '.') . ' VNĐ</td> 
+                                    <td>' . htmlspecialchars($product['content']) . '</td>
+                                    <td>' . htmlspecialchars($product['category_name']) . '</td>
+                                    <td>';
+
+                                // Hiển thị tất cả các size cho sản phẩm này
+                                foreach ($product['sizes'] as $size) {
+                                    echo htmlspecialchars($size['size']) . ' (' . number_format($size['price'], 0, ',', '.') . ' VNĐ)<br>';
+                                }
+
+                                echo '</td>
                                     <td>
-                                        <a href="add.php?id=' . $item['id'] . '">
+                                        <a href="add.php?id=' . $product['id'] . '">
                                             <button class="btn btn-warning">Sửa</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-danger" onclick="deleteProduct(' . $item['id'] . ')">Xoá</button>
+                                        <button class="btn btn-danger" onclick="deleteProduct(' . $product['id'] . ')">Xoá</button>
                                     </td>
                                 </tr>';
                             }
@@ -111,7 +152,7 @@ require_once('../database/dbhelper.php');
                 $result = executeSingleResult($sql);
                 $totalRecords = $result['total'];
                 $totalPages = ceil($totalRecords / $limit);
-
+ 
                 for ($i = 1; $i <= $totalPages; $i++) {
                     if ($i == $page) {
                         echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
@@ -126,6 +167,7 @@ require_once('../database/dbhelper.php');
 
     <script type="text/javascript">
         function deleteProduct(id) {
+        console.log(id)
             var option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?');
             if (!option) return;
 

@@ -83,7 +83,7 @@ section.main
 }
 section.main section.oder-product .title .main-order .box .about .add-cart {
   padding: 13px 30px;
-  background-color: rgba(255, 68, 35, 0.856);
+  background-color: burlywood;
   border-radius: 3px;
   color: white;
   border: none;
@@ -101,6 +101,7 @@ section.main
   .add-cart:hover {
   cursor: pointer;
   opacity: 0.8;
+  background-color: brown;
 }
 /* END SẢN PHẨM  */
 aside h1 {
