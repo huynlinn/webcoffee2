@@ -86,21 +86,24 @@ if (count($idList) > 0) {
 
         // Hiển thị sản phẩm chỉ với size đã chọn
         if ($num > 0) {
-            $total += $num * $price;
-            echo '
-            <tr style="text-align: center;">
-                <td width="50px">' . (++$count) . '</td>
-                <td style="text-align:center">
-                    <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
-                </td>
-                <td>' . $item['title'] . '</td>
-                <td>' . $size . '</td>
-                <td class="b-500 red">' . number_format($price, 0, ',', '.') . '<span> VNĐ</span></td>
-                <td width="100px">' . $num . '</td>
-                <td>
-                    <button class="btn btn-danger" onclick="deleteFromCart(' . $item['id'] . ', \'' . $size . '\')">Xoá</button>
-                </td>
-            </tr>';
+                    $total += $num * $price;
+        echo '
+        <tr style="text-align: center;">
+            <td width="50px">' . (++$count) . '</td>
+            <td style="text-align:center">
+                <img src="admin/product/' . $item['thumbnail'] . '" alt="" style="width: 50px">
+            </td>
+            <td>' . $item['title'] . '</td>
+            <td>' . $size . '</td>
+            <td class="b-500 red">' . number_format($price, 0, ',', '.') . '<span> VNĐ</span></td>
+            <td width="100px">
+                <input type="number" class="form-control quantity-input" min="1" value="' . $num . '" 
+                    onchange="updateQuantity(' . $item['id'] . ', \'' . $size . '\', this.value)">
+            </td>
+            <td>
+                <button class="btn btn-danger" onclick="deleteFromCart(' . $item['id'] . ', \'' . $size . '\')">Xoá</button>
+            </td>
+        </tr>';
         }
     }
     ?>
@@ -135,6 +138,22 @@ if (count($idList) > 0) {
     });
 }
 
+function updateQuantity(id, size, quantity) {
+    if (quantity < 1) {
+        alert("Số lượng phải lớn hơn 0!");
+        return;
+    }
+
+    $.post('api/cookie.php', {
+        'action': 'update',
+        'id': id,
+        'size': size,
+        'quantity': quantity
+    }, function(data) {
+        alert("Số lượng đã được cập nhật!");
+        location.reload(); // Tải lại trang để cập nhật giỏ hàng
+    });
+}
 
 
         function checkLogin() {

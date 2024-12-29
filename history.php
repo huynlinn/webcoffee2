@@ -73,28 +73,59 @@ require_once('utils/utility.php');
                                         $userId = $item['id_user'];
                                     }
 
-                                    $sql = "SELECT * from order_details, product where product.id=order_details.product_id AND order_details.id_user = '$userId' ORDER BY order_id DESC";
-                                    $order_details_List = executeResult($sql);
-                                    $total = 0;
-                                    $count = 0;
-                                    // $sql = 'SELECT * FROM user where username = $username';
-                                    foreach ($order_details_List as $item) {
-                                        echo '
-                                        <tr style="text-align: center;">
-                                            <td width="50px">' . (++$count) . '</td>
-                                            <td style="text-align:center">
-                                                <img width="50px" src="admin/product/' . $item['thumbnail'] . '">
-                                            </td>
-                                            <td>' . $item['title'] . '</td>
-                                            <td class="b-500 orange">' . number_format($item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td width="100px">' . $item['num'] . '</td>
-                                            <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . '<span> VNĐ</span></td>
-                                            <td style="color:green; font-weight:600;">' . $item['status'] . '</td>
-                                        </tr>
-                                        ';
-                                    }
-                                }
+                                    $sql = "SELECT o.id AS order_id, o.fullname, o.phone_number, o.email, o.address, o.note, o.order_date,
+       od.product_id, od.num, od.price, od.status, p.title, p.thumbnail
+FROM order_details od
+JOIN product p ON p.id = od.product_id
+JOIN orders o ON o.id = od.order_id
+WHERE od.id_user = '$userId'
+ORDER BY o.id DESC;
 
+";
+
+
+$order_details_List = executeResult($sql);
+$orders = [];
+
+foreach ($order_details_List as $item) {
+    // Tạo mảng nhóm đơn hàng theo order_id
+    if (!isset($orders[$item['order_id']])) {
+        $orders[$item['order_id']] = [
+            'order_id' => $item['order_id'],
+            'status' => $item['status'],
+            'items' => []
+        ];
+    }
+    
+    // Thêm sản phẩm vào đơn hàng
+    $orders[$item['order_id']]['items'][] = [
+        'product_id' => $item['product_id'],
+        'title' => $item['title'],
+        'thumbnail' => $item['thumbnail'],
+        'price' => $item['price'],
+        'num' => $item['num']
+    ];
+}
+$count = 0;
+foreach ($orders as $order) {
+    echo '<tr><td colspan="7"><strong>Đơn hàng ' . (++$count) . ' (Mã đơn: ' . $order['order_id'] . ')</strong></td></tr>';
+    foreach ($order['items'] as $item) {
+        echo '
+        <tr style="text-align: center;">
+            <td width="50px">' . (++$count) . '</td>
+            <td style="text-align:center">
+                <img width="50px" src="admin/product/' . $item['thumbnail'] . '">
+            </td>
+            <td>' . $item['title'] . '</td>
+            <td class="b-500 orange">' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
+            <td width="100px">' . $item['num'] . '</td>
+            <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . ' VNĐ</td>
+            <td style="color:green; font-weight:600;">' . $order['status'] . '</td>
+        </tr>
+        ';
+    }
+}
+                                }
                                 ?>
                             </tbody>
                         </table>

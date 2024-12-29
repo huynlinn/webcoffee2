@@ -43,21 +43,21 @@ if (isset($_POST['action'])) {
             setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
             break;
 
-        case 'delete':
-            // Xóa sản phẩm khỏi giỏ hàng
-            $id = $_POST['id'];
-            $size = $_POST['size'];
-
-            foreach ($cart as $key => $item) {
-                if ($item['id'] == $id && $item['size'] == $size) {
-                    unset($cart[$key]);  // Xóa sản phẩm khỏi giỏ
-                    break;
+            case 'delete':
+                $id = $_POST['id'];
+                $size = $_POST['size'];
+                
+                foreach ($cart as $key => $item) {
+                    if ($item['id'] == $id && $item['size'] == $size) {
+                        unset($cart[$key]);  // Xóa sản phẩm khỏi giỏ
+                        break;
+                    }
                 }
-            }
-
-            // Cập nhật lại giỏ hàng vào cookie
-            setcookie('cart', json_encode(array_values($cart)), time() + 30 * 24 * 60 * 60, '/');
-            break;
+                
+                // Cập nhật lại cookie sau khi xóa
+                setcookie('cart', json_encode(array_values($cart)), time() + 30 * 24 * 60 * 60, '/');
+                break;
+            
 
         case 'update':
             // Cập nhật số lượng sản phẩm
@@ -79,4 +79,22 @@ if (isset($_POST['action'])) {
         // Các case khác nếu có
     }
 }
+if ($action == 'update') {
+    $id = getPost('id');
+    $size = getPost('size');
+    $quantity = getPost('quantity');
+
+    if ($quantity > 0) {
+        foreach ($cart as &$item) {
+            if ($item['id'] == $id && $item['size'] == $size) {
+                $item['num'] = $quantity; // Cập nhật số lượng
+                break;
+            }
+        }
+        setcookie('cart', json_encode($cart), time() + 30 * 24 * 60 * 60, '/');
+    }
+    echo 'Cập nhật thành công';
+    die();
+}
+
 ?>

@@ -8,8 +8,8 @@ require_once('utils/utility.php');
 
 // Kiểm tra giỏ hàng
 $cart = isset($_COOKIE['cart']) ? json_decode($_COOKIE['cart'], true) : [];
-if (!$cart) {
-    $cart = [];
+if (!is_array($cart)) {
+    $cart = []; // Đảm bảo luôn là mảng
 }
 
 
@@ -44,24 +44,35 @@ if (count($resultUser) == 0) {
 $id_user = $resultUser[0]['id_user'];  // Lấy id_user của người dùng
 
 
-// Lấy danh sách sản phẩm trong giỏ hàng
 $idList = [];
 foreach ($cart as $item) {
-    $idList[] = $item['id'];
+    if ($item['num'] > 0) {  // Chỉ thêm vào danh sách nếu số lượng sản phẩm lớn hơn 0
+        $idList[] = $item['id'];
+    }
 }
-
 
 $cartList = [];
 if (count($idList) > 0) {
     $idList = implode(',', $idList);
-    $sql = "SELECT p.id, p.title, p.thumbnail, ps.size, ps.price FROM product p
+
+    // Truy vấn cơ sở dữ liệu để lấy thông tin sản phẩm
+    $sql = "SELECT p.id, p.title, p.thumbnail, ps.size, ps.price 
+            FROM product p
             JOIN product_size ps ON p.id = ps.product_id
             WHERE p.id IN ($idList)";
-    $cartList = executeResult($sql);
-} else {
-    $cartList = [];
-}
+    $rawCartList = executeResult($sql);
 
+    // Lọc lại sản phẩm chỉ tồn tại trong cookie
+    foreach ($rawCartList as $item) {
+        foreach ($cart as $cartItem) {
+            if ($item['id'] == $cartItem['id'] && $item['size'] == $cartItem['size']) {
+                $item['num'] = $cartItem['num']; // Gắn số lượng từ cookie
+                $cartList[] = $item;
+                break;
+            }
+        }
+    }
+}
 
 // Tính tổng số tiền đơn hàng
 function calculateTotal($cart, $cartList) {
@@ -145,70 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
    
     // $hashdata = urldecode(http_build_query($inputData));
-    if ($payment_method == 'VNPay') {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "https://localhost/coffeshop/vnpay_php/vnpay_return.php"; 
-        $vnp_TmnCode = "TLJF1MV9";  // Mã website tại VNPAY
-        $vnp_HashSecret = "4JWUX5MRN8HWL8DTDOMCXIXS5E8EABTB";  // Chuỗi bí mật từ VNPAY
-   
-        $vnp_TxnRef = $orderId;  // Mã đơn hàng
-        $vnp_OrderInfo = 'Thanh toán đơn hàng ' . $orderId;
-        $vnp_OrderType = 'billpayment';
-        $vnp_Amount = $total *100;  // VNPay yêu cầu giá trị là đồng (100 VNĐ = 1VND)
-        $vnp_Locale = 'vn';  // Ngôn ngữ
-        $vnp_BankCode = 'NCB';  // Mã ngân hàng, ví dụ 'NCB'
-   
-        // Thêm địa chỉ IP
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-       
-        // Tạo các tham số của VNPay
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef
-            
-        );
-   
-        // Thêm mã ngân hàng nếu có
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
-        }
-       
-       // Sắp xếp các tham số theo thứ tự từ A-Z
-       ksort($inputData);  // Sắp xếp các tham số theo thứ tự
-        $hashdata = "";
-    foreach ($inputData as $key => $value) {
-         $hashdata .= $key . '=' . $value . '&';  // Nối tham số
-    }
-    $hashdata = rtrim($hashdata, "&");//     Xóa ký tự '&' thừa ở cuối
-   
-       // Tính toán chữ ký HMAC-SHA512
-       $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-       
-       // Thêm chữ ký vào URL thanh toán
-       $vnp_Url .= "?" . http_build_query($inputData) . "&vnp_SecureHash=" . $vnpSecureHash;    
-      
-       
-
-       
-
-
-        // Chuyển hướng đến VNPay
-        header('Location: ' . $vnp_Url);
-        exit();  // Dừng mã PHP để không thực thi thêm mã phía dưới
-    }
    
    
 }
@@ -312,6 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             }
                                         }
                                     }
+                                    
                                     ?>
                                 </tbody>
                             </table>

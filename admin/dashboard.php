@@ -51,6 +51,7 @@
                         <thead>
                             <tr style="font-weight: 500;text-align: center;">
                                 <td width="50px">STT</td>
+                                <td width="150px">Mã Đơn Hàng</td> <!-- Added Mã Đơn Hàng column -->
                                 <td width="200px">Tên User</td>
                                 <td>Tên Sản Phẩm/<br>Số lượng</td>
                                 <td>Size</td>
@@ -74,20 +75,20 @@
                                 $start = ($page - 1) * $limit;
 
                                 $sql = "SELECT orders.*, order_details.*, product.*, order_details.size AS o_size
-        FROM orders
-        JOIN order_details ON order_details.order_id = orders.id
-        JOIN product ON product.id = order_details.product_id
-        ORDER BY order_date DESC
-        LIMIT $start, $limit";
+                                        FROM orders
+                                        JOIN order_details ON order_details.order_id = orders.id
+                                        JOIN product ON product.id = order_details.product_id
+                                        ORDER BY order_date DESC
+                                        LIMIT $start, $limit";
 
                                 $order_details_List = executeResult($sql);
                                 $total = 0;
                                 $count = 0;
-                                // if (is_array($order_details_List) || is_object($order_details_List)){
                                 foreach ($order_details_List as $item) {
                                     echo '
                                         <tr style="text-align: center;">
                                             <td width="50px">' . (++$count) . '</td>
+                                            <td>' . $item['order_id'] . '</td> <!-- Display Mã Đơn Hàng -->
                                             <td style="text-align:center">' . $item['fullname'] . '</td>
                                             <td>' . $item['title'] . '<br>(<strong>' . $item['num'] . '</strong>)</td>
                                             <td width="100px">' . $item['o_size'] . '</td>
@@ -112,7 +113,7 @@
             <ul class="pagination">
                 <?php
                 $sql = "SELECT * from orders, order_details, product
-                where order_details.order_id=orders.id and product.id=order_details.product_id";
+                        where order_details.order_id=orders.id and product.id=order_details.product_id";
                 $conn = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
                 $result = mysqli_query($conn, $sql);
                 $current_page = 0;
@@ -121,16 +122,8 @@
                     $current_page = ceil($numrow / 10);
                 }
                 for ($i = 1; $i <= $current_page; $i++) {
-                    // Nếu là trang hiện tại thì hiển thị thẻ span
-                    // ngược lại hiển thị thẻ a
-                    if ($i == $current_page) {
-                        echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    } else {
-                        echo '
-            <li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>
-                    ';
-                    }
+                    // If it's the current page, display the page number as active
+                    echo '<li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
                 }
                 ?>
             </ul>
