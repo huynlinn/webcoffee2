@@ -65,7 +65,7 @@
   --
 
   INSERT INTO `orders` (`id`, `fullname`, `phone_number`, `email`, `address`, `note`, `order_date`) VALUES
-  (143, 'Huyenlinh', '0387578520', 'bossryo68a@gmail.com', '68.65.120.213, viet nam', '', '2021-11-07 08:37:06'),
+  (143, 'Huyenlinh', '0387578520', 'bossryo68a@gmail.com', '68.65.120.213, viet nam', '', '2024-11-07 08:37:06'),
   (144, 'DEMO', '03875723232', 'DEMO@gmail.com', 'DEMO', 'DEMO', '2021-11-07 08:42:16');
 
   -- --------------------------------------------------------
@@ -327,4 +327,4 @@
 
 
 -- thêm
-ALTER TABLE orders ADD COLUMN total_amount DECIMAL(10, 2) NOT NULL;
+ALTER TABLE orders MODIFY order_date DATETIME DEFAULT CURRENT_TIMESTAMP;

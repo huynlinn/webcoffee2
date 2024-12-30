@@ -57,6 +57,7 @@ require_once('utils/utility.php');
                                     <td>Giá</td>
                                     <td>Số lượng</td>
                                     <td>Tổng cộng</td>
+                                    <td>Thời gian đặt</td>
                                     <td>Trạng thái</td>
                                     <!-- <td width="50px"></td> -->
                                 </tr>
@@ -81,6 +82,7 @@ JOIN orders o ON o.id = od.order_id
 WHERE od.id_user = '$userId'
 ORDER BY o.id DESC;
 
+
 ";
 
 
@@ -93,8 +95,10 @@ foreach ($order_details_List as $item) {
         $orders[$item['order_id']] = [
             'order_id' => $item['order_id'],
             'status' => $item['status'],
+            'order_date' => $item['order_date'], // Thêm order_date vào mảng
             'items' => []
         ];
+        
     }
     
     // Thêm sản phẩm vào đơn hàng
@@ -105,27 +109,29 @@ foreach ($order_details_List as $item) {
         'price' => $item['price'],
         'num' => $item['num']
     ];
-}
-$count = 0;
-foreach ($orders as $order) {
-    echo '<tr><td colspan="7"><strong>Đơn hàng ' . (++$count) . ' (Mã đơn: ' . $order['order_id'] . ')</strong></td></tr>';
-    foreach ($order['items'] as $item) {
-        echo '
-        <tr style="text-align: center;">
-            <td width="50px">' . (++$count) . '</td>
-            <td style="text-align:center">
-                <img width="50px" src="admin/product/' . $item['thumbnail'] . '">
-            </td>
-            <td>' . $item['title'] . '</td>
-            <td class="b-500 orange">' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
-            <td width="100px">' . $item['num'] . '</td>
-            <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . ' VNĐ</td>
-            <td style="color:green; font-weight:600;">' . $order['status'] . '</td>
-        </tr>
-        ';
-    }
-}
-                                }
+        }$orderCount = 0; // Đếm số thứ tự đơn hàng
+        foreach ($orders as $order) {
+            echo '<tr><td colspan="7"><strong>Đơn hàng ' . (++$orderCount) . ' (Mã đơn: ' . $order['order_id'] . ')</strong></td></tr>';
+
+            $itemCount = 0; // Đếm số thứ tự sản phẩm cho từng đơn hàng
+            foreach ($order['items'] as $item) {
+                echo '
+                <tr style="text-align: center;">
+                    <td width="50px">' . (++$itemCount) . '</td>
+                    <td style="text-align:center">
+                        <img width="50px" src="admin/product/' . $item['thumbnail'] . '">
+                    </td>
+                    <td>' . $item['title'] . '</td>
+                    <td class="b-500 orange">' . number_format($item['price'], 0, ',', '.') . ' VNĐ</td>
+                    <td width="100px">' . $item['num'] . '</td>
+                    <td class="b-500 red">' . number_format($item['num'] * $item['price'], 0, ',', '.') . ' VNĐ</td>
+                    <td>' . (isset($order['order_date']) ? date("d-m-Y H:i:s", strtotime($order['order_date'])) : 'Không xác định') . '</td>
+                    <td style="color:green; font-weight:600;">' . $order['status'] . '</td>
+                </tr>
+                ';
+            }
+        }
+                                        }
                                 ?>
                             </tbody>
                         </table>
